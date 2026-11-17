@@ -13,6 +13,7 @@ description: 한국 소상공인 가게의 네이버 블로그 글을 쓰고, �
 2. 유형·말투를 고른다: `guides/styles/blog.md`
 3. 네이버 글을 쓴다: `guides/make/blog-naver.md` + 고른 유형의 줄만 `guides/make/blog-naver-types.md`
 4. 발행 뒤 노출이 확인되면(24시간 이상 뒤) 티스토리용을 새로 쓴다: `guides/make/blog-tistory.md`
+5. 노출 확인·검색 조사는 네이버 약관을 지킨다: 키가 있으면 공식 API(`mk.py search-blog`), 없으면 사장님 폰 캡처. 네 브라우저로 네이버에 검색어를 넣는 것도 사장님 동의가 필요하다. 사장님이 준 특정 주소만 열어도 된다.
 
 ## 꼭 지킬 것
 

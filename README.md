@@ -44,7 +44,7 @@ https://raw.githubusercontent.com/Whosekey-Labs/kr-marketing-skill/main/SKILL.md
 | 경로 | 내용 |
 |---|---|
 | `SKILL.md` | 에이전트가 처음 읽는 파일 (역할·규칙·단계) |
-| `guides/00~08` | 시작, 스스로 조사, 질문, 전략, 주간 루프, 월간 회고, 레퍼런스, 디자인 키트 |
+| `guides/00~09` | 시작, 스스로 조사, 질문, 전략, 주간 루프, 월간 회고, 레퍼런스, 디자인 키트, 운영, 이번 주 주제 찾기 |
 | `guides/industries/` | 업종 26개 전략 파일 |
 | `guides/compliance/` | 법규 검수 19가지 |
 | `guides/styles/` | 블로그 유형·문체, 카드뉴스 유형·스타일, 숏폼 구성 고르기 |

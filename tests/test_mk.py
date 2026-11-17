@@ -310,5 +310,238 @@ class UrlCheckTest(unittest.TestCase):
                 mk.check_url(u)
 
 
+# ---------------------------------------------------------------- 콘텐츠 발굴 (응답 모양은 2026-11-17 실제 응답을 줄인 것)
+
+class DiscoveryParseTest(unittest.TestCase):
+    def test_naver_ac(self):
+        body = '{"query":["일산 소금빵"],"items":[[["일산 소금빵"],["일산 소금빵 맛집"],["일산 소금빵 성지"]]]}'
+        self.assertEqual(mk.parse_naver_ac(body), ["일산 소금빵", "일산 소금빵 맛집", "일산 소금빵 성지"])
+        self.assertEqual(mk.parse_naver_ac('{"items":[[]]}'), [])
+
+    def test_qra(self):
+        page = 'x,"apiURL":"https://s.search.naver.com/p/qra/1/search.naver?a=1\\u0026q=%EC%9D%BC",y'
+        self.assertEqual(mk.find_qra_url(page), "https://s.search.naver.com/p/qra/1/search.naver?a=1&q=%EC%9D%BC")
+        self.assertIsNone(mk.find_qra_url("<html></html>"))
+        body = json.dumps({"result": {"contents": [
+            {"query": "일산 빵집 맛집", "badge": {"type": "global", "text": "많이 찾는"}},
+            {"query": "일산 레이크빵집"}, {"title": "query 없음"}]}}, ensure_ascii=False)
+        self.assertEqual(mk.parse_qra(body), [dict(query="일산 빵집 맛집", badge="많이 찾는"),
+                                              dict(query="일산 레이크빵집", badge="")])
+
+    def test_kin_recent_only(self):
+        li = ('<dl><dt><a href="https://kin.naver.com/qna/detail.naver?dirId=1&amp;docId={d}&amp;qb=7KCV" class="_x">'
+              '<b>정발산</b> {t}</a></dt><dd class="txt_inline">{date}</dd><dd>요약</dd></dl>')
+        page = "<ul>" + li.format(d=1, t="글루텐프리 카페 추천", date="2026.01.15.") \
+            + li.format(d=2, t="옛날 질문", date="2008.10.16.") + "</ul>"
+        items, old = mk.parse_kin(page, dt.date(2026, 11, 17))
+        self.assertEqual(old, 1)
+        self.assertEqual(items, [dict(title="정발산 글루텐프리 카페 추천", date="2026-01-15",
+                                      url="https://kin.naver.com/qna/detail.naver?dirId=1&docId=1")])
+
+    def test_google_suggest_and_gt(self):
+        self.assertEqual(mk.parse_google_suggest('["일산 빵집",["일산 빵집 추천","일산 빵집 브이로그"]]'),
+                         ["일산 빵집 추천", "일산 빵집 브이로그"])
+        self.assertEqual(mk.parse_gt_json(')]}\',\n{"default":{"x":1}}'), {"default": {"x": 1}})
+
+    def test_trend_direction(self):
+        self.assertTrue(mk.trend_direction([10] * 28 + [20] * 28).startswith("오름"))
+        self.assertTrue(mk.trend_direction([20] * 28 + [10] * 28).startswith("내림"))
+        self.assertTrue(mk.trend_direction([10] * 8).startswith("보합"))
+        self.assertEqual(mk.trend_direction([0] * 50 + [2] * 6), "검색 적음(판단 보류)")
+        self.assertEqual(mk.trend_direction([1, 2]), "판단 불가(자료 부족)")
+        self.assertEqual(mk.trend_direction([0] * 40 + [0, 100] * 8), "검색 드묾(판단 보류)")
+
+    def test_shop_rank(self):
+        body = '{"range":"2026.11.10. ~ 2026.11.16.","ranks":[{"rank":1,"keyword":"수능선물"},{"rank":2,"keyword":"빼빼로"}]}'
+        self.assertEqual(mk.parse_shop_rank(body), ["수능선물", "빼빼로"])
+
+    def test_festivals(self):
+        body = json.dumps({"totalCnt": 3, "resultList": [
+            dict(cntntsNm="운정호수공원 불꽃축제", fstvlBgngDe="2026.10.31", fstvlEndDe="2026.12.31", areaNm="경기도 파주시",
+                 dtadr="운정호수공원 일대", fstvlUtztFareInfo="무료\t"),
+            dict(cntntsNm="고양도시농업축제", fstvlBgngDe="2026.10.31", fstvlEndDe="2026.11.01", areaNm="경기도 고양시"),
+            dict(cntntsNm="고양 겨울축제", fstvlBgngDe="2026.12.05", fstvlEndDe="2026.12.06", areaNm="경기도 고양시")]},
+            ensure_ascii=False)
+        items, total = mk.parse_festivals(body)
+        self.assertEqual(total, 3)
+        self.assertEqual(items[0]["fee"], "무료")
+        today = dt.date(2026, 11, 17)
+        self.assertEqual([x["name"] for x in mk.filter_festivals(items, ["고양"], today, 6)], ["고양 겨울축제"])
+        self.assertEqual([x["name"] for x in mk.filter_festivals(items, [], today, 6)],
+                         ["운정호수공원 불꽃축제", "고양 겨울축제"])
+        self.assertEqual(mk.filter_festivals(items, ["고양"], today, 2), [])
+
+    def test_festival_area(self):
+        self.assertEqual(mk.festival_area("경기 고양"), ("31", ["고양"]))
+        self.assertEqual(mk.festival_area("경기도 고양시"), ("31", ["고양시"]))
+        self.assertEqual(mk.festival_area("충청남도 천안"), ("34", ["천안"]))
+        self.assertEqual(mk.festival_area("일산")[0], "31")
+        self.assertEqual(mk.festival_area("서울 성수")[0], "1")
+        with self.assertRaises(RuntimeError):
+            mk.festival_area("어딘가")
+
+    def test_seeds(self):
+        self.assertEqual(mk.ideas_seeds("정발산동 빵집", ["소금빵"], None), ["정발산동 빵집", "정발산동 소금빵"])
+        self.assertEqual(mk.ideas_seeds("정발산동 빵집,일산 빵집", ["소금빵"], "일산"),
+                         ["정발산동 빵집", "일산 빵집", "일산 소금빵"])
+        self.assertEqual(mk.ideas_seeds("소상공인 AI", ["카톡 자동응답"], ""), ["소상공인 AI", "카톡 자동응답"])
+
+
+class SeasonTest(unittest.TestCase):
+    def test_boknal_known_years(self):
+        # 실제 발표값: 2024 초복 7/15·중복 7/25·말복 8/14, 2025 7/20·7/30·8/9
+        self.assertEqual([d.isoformat() for d, _ in mk.boknal(2024)], ["2024-07-15", "2024-07-25", "2024-08-14"])
+        self.assertEqual([d.isoformat() for d, _ in mk.boknal(2025)], ["2025-07-20", "2025-07-30", "2025-08-09"])
+
+    def test_window(self):
+        ev = mk.season_events(dt.date(2026, 11, 17), 6)
+        names = [e["name"] for e in ev]
+        self.assertIn("수능", names)
+        self.assertIn("크리스마스", names)
+        self.assertIn("김장철", names)                 # 진행 중인 시즌도 나온다
+        self.assertNotIn("빼빼로데이·가래떡데이", names)  # 지난 날은 빠진다
+        self.assertEqual(ev[0]["d"] <= ev[-1]["d"], True)
+        bf = [e for e in ev if e["name"] == "블랙프라이데이"][0]
+        self.assertEqual(bf["date"], "2026-11-27")
+
+    def test_unknown_year_warns(self):
+        ev = mk.season_events(dt.date(2028, 1, 10), 6)
+        self.assertTrue(any(e["kind"] == "안내" for e in ev))
+
+
+class DiscoveryUrlTest(unittest.TestCase):
+    def test_new_hosts(self):
+        for u in ("https://ac.search.naver.com/nx/ac?q=x", "https://s.search.naver.com/p/qra/1/search.naver",
+                  "https://kin.naver.com/search/list.naver?query=x",
+                  "https://datalab.naver.com/shoppingInsight/getCategoryKeywordRank.naver",
+                  "https://trends.google.com/trends/api/explore", "https://suggestqueries.google.com/complete/search",
+                  "https://korean.visitkorea.or.kr/kfes/list/selectWntyFstvlList.do"):
+            mk.check_url(u)
+        for u in ("https://google.com/", "https://visitkorea.or.kr.evil.com/", "http://kin.naver.com/"):
+            with self.assertRaises(RuntimeError, msg=u):
+                mk.check_url(u)
+
+
+class OfficialFirstTest(unittest.TestCase):
+    """10b 4장: 네이버 검색 화면은 --unofficial 없이는 열지 않는다."""
+    def test_gate(self):
+        mk.UNOFFICIAL["on"] = False
+        for u in ("https://search.naver.com/search.naver?query=x", "https://ac.search.naver.com/nx/ac?q=x",
+                  "https://kin.naver.com/search/list.naver?query=x", "https://m.blog.naver.com/a/123456789",
+                  "https://datalab.naver.com/shoppingInsight/getCategoryKeywordRank.naver"):
+            with self.assertRaisesRegex(RuntimeError, "기본으로 꺼", msg=u):
+                mk.fetch(u)
+
+    def test_api_blog(self):
+        items = [dict(title="<b>일산</b> 소금빵 후기", link="https://blog.naver.com/abc_1/224471871253",
+                      description="주말 방문 솔직 후기", bloggername="류구리", bloggerlink="blog.naver.com/abc_1",
+                      postdate="20261110")]
+        r = mk.parse_api_blog(items)
+        self.assertEqual(r[0]["title"], "일산 소금빵 후기")
+        self.assertEqual(r[0]["blog_id"], "abc_1")
+        self.assertEqual(r[0]["date"], "2026-11-10")
+        self.assertEqual(r[0]["kind"], "손님 후기 추정")
+
+    def test_api_local_and_kin(self):
+        loc = mk.parse_api_local([dict(title="<b>밀</b>과결", category="음식점>제과,베이커리", roadAddress="경기 고양시 …",
+                                       link="", telephone="")])
+        self.assertEqual((loc[0]["name"], loc[0]["id"]), ("밀과결", None))
+        self.assertIn("API에 없어요", mk.fmt_list(loc))
+        kin = mk.parse_api_kin([dict(title="<b>소금빵</b> 보관", link="https://kin.naver.com/qna/detail.naver?d=1")])
+        self.assertEqual(kin, [dict(title="소금빵 보관", date="", url="https://kin.naver.com/qna/detail.naver?d=1")])
+
+    def test_widen(self):
+        self.assertEqual(mk.widen_levels("정발산동 빵집", ["일산"]),
+                         [("동네", "정발산동 빵집"), ("시·구", "일산 빵집"), ("업종만", "빵집")])
+        self.assertEqual(mk.widen_levels("빵집", ["일산"]), [("그대로", "빵집")])
+
+    def test_shop_window(self):
+        fs, fe = mk.shop_window(dt.date(2026, 11, 17))
+        self.assertEqual((fs.isoformat(), fe.isoformat()), ("2025-12-01", "2025-12-29"))
+
+
+class ReviewFixTest(unittest.TestCase):
+    """독립 검수 P1·P2 반영 확인."""
+    def test_related_index_single(self):
+        self.assertEqual(mk.related_index("RELATED_QUERIES"), 0)      # 키워드 1개일 때
+        self.assertEqual(mk.related_index("RELATED_QUERIES_3"), 3)
+
+    def test_redirect_gate(self):
+        import urllib.request
+        mk.UNOFFICIAL["on"] = False
+        req = urllib.request.Request("https://rss.blog.naver.com/x.xml")
+        with self.assertRaisesRegex(RuntimeError, "기본으로 꺼"):
+            mk._SafeRedirect().redirect_request(req, None, 302, "", {}, "https://m.blog.naver.com/x")
+
+    def test_festival_alias(self):
+        self.assertEqual(mk.festival_area("경기 일산"), ("31", ["고양"]))
+        self.assertEqual(mk.festival_area("경기도 분당"), ("31", ["성남"]))
+
+    def test_daeboreum_2027(self):
+        ev = mk.season_events(dt.date(2027, 2, 1), 4)
+        self.assertIn(("2027-02-21", "정월대보름"), [(e["date"], e["name"]) for e in ev])
+
+    def test_ideas_no_widen_and_cap(self):
+        calls = []
+        orig = (mk.google_ac, mk.youtube_ac, mk.searchad_volume, mk.naver_ac, mk.naver_related, mk.kin_questions)
+        mk.google_ac = lambda q: calls.append(q) or []
+        mk.youtube_ac = lambda q: []
+        mk.searchad_volume = lambda k: []
+        mk.naver_ac = lambda q: []
+        mk.naver_related = lambda q: []
+        mk.kin_questions = lambda q, t: ([], 0)
+        try:
+            import argparse, contextlib, io
+            a = argparse.Namespace(keyword="소상공인 AI", kw=None, menu="카톡 자동응답", area="", wide="일산",
+                                   max=3, no_youtube=True, json=True)
+            mk.UNOFFICIAL["on"] = False
+            with contextlib.redirect_stdout(io.StringIO()):
+                mk.cmd_ideas(a)
+            self.assertEqual(calls, ["소상공인 AI", "카톡 자동응답"])     # 넓히지 않음
+            calls.clear()
+            a = argparse.Namespace(keyword="정발산동 빵집", kw=None, menu="소금빵,크루아상,깜파뉴", area=None, wide="",
+                                   max=3, no_youtube=True, json=False)
+            mk.UNOFFICIAL["on"] = True
+            buf = io.StringIO()
+            with contextlib.redirect_stdout(buf):
+                mk.cmd_ideas(a)
+            self.assertIn("앞 2개만", buf.getvalue())
+        finally:
+            mk.UNOFFICIAL["on"] = False
+            (mk.google_ac, mk.youtube_ac, mk.searchad_volume, mk.naver_ac, mk.naver_related, mk.kin_questions) = orig
+
+
+class Review2Test(unittest.TestCase):
+    """2차 검수 반영 확인."""
+    def test_split_same_basis(self):
+        self.assertEqual(mk.widen_levels("서울 마포 빵집", ["마포"]),
+                         [("동네", "서울 마포 빵집"), ("시·구", "마포 빵집"), ("업종만", "빵집")])
+        self.assertEqual(mk.ideas_seeds("서울 마포 빵집", ["소금빵"], None), ["서울 마포 빵집", "서울 마포 소금빵"])
+
+    def test_ideas_empty(self):
+        import argparse
+        a = argparse.Namespace(keyword=" , ", kw=None, menu=None, area=None, wide="", max=3, no_youtube=True, json=True)
+        with self.assertRaisesRegex(RuntimeError, "비었어요"):
+            mk.cmd_ideas(a)
+
+    def test_rank_refuses_once_without_key(self):
+        import argparse
+        mk.UNOFFICIAL["on"] = False
+        old = os.environ.pop("NAVER_CLIENT_ID", None)
+        try:
+            a = argparse.Namespace(keyword="일산 빵집,일산 소금빵", kw=None, name="밀과결", blog_id=None, log=None, json=False)
+            with self.assertRaisesRegex(RuntimeError, "기본으로 꺼"):
+                mk.cmd_rank(a)
+        finally:
+            if old is not None:
+                os.environ["NAVER_CLIENT_ID"] = old
+
+    def test_suneung_unknown_year_warns(self):
+        ev = mk.season_events(dt.date(2027, 10, 20), 8)
+        self.assertTrue(any("2027년 수능" in e["name"] for e in ev))
+        ev = mk.season_events(dt.date(2026, 11, 1), 4)
+        self.assertFalse(any("수능 날짜가 표에 없어요" in e["name"] for e in ev))
+
+
 if __name__ == "__main__":
     unittest.main()

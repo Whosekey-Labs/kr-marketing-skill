@@ -16,7 +16,7 @@
 
 | 종류 | 찾는 곳 (모드별) |
 |---|---|
-| 같은 업종 전국 상위 | 스크립트: `python3 mk.py search-blog "{업종} {주제}"`(예: "빵집 신메뉴") / 브라우저: 네이버 블로그 검색, 인스타 해시태그·릴스 검색, 유튜브 `https://www.youtube.com/results?search_query={업종}+{주제}` |
+| 같은 업종 전국 상위 | 스크립트(키): `python3 mk.py search-blog "{업종} {주제}"`(예: "빵집 신메뉴") / 브라우저: 네이버 블로그 검색(공통 규칙 ③ 동의 뒤에만 — `guides/01-research.md`), 인스타 해시태그·릴스 검색, 유튜브 `https://www.youtube.com/results?search_query={업종}+{주제}` |
 | 축이 같은 다른 업종 | 우리와 손님·상황이 같은 업종. 예: 카페(감성·자주 옴) ↔ 꽃집·소품샵·베이커리, 필라테스(지역·장기 회원) ↔ 학원·미용실. 같은 방법으로 검색 |
 | 해외 | 인스타·틱톡·유튜브 쇼츠의 영어 검색(예: "bakery reels", "croissant lamination"). 틱톡에서 먼저 뜬 형식이 인스타·유튜브로 넘어오는 경우가 많다 |
 | 광고 | 메타 광고 라이브러리 `https://www.facebook.com/ads/library/`, 틱톡 Creative Center `https://ads.tiktok.com/business/creativecenter/` |
