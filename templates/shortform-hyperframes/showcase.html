@@ -1,0 +1,74 @@
+<!doctype html>
+<!-- kr-marketing-skill 숏폼 템플릿: 쇼케이스(T2 상품 한 컷·T3 가게 구경). 사진이 화면 전체, 위 고정 제목 + 큰 자막.
+     [대괄호]는 사장님 자료로 채운다. 사진은 assets/photo/1~4.jpg(세로). 없으면 장면을 빼고 시간을 당긴다. -->
+<html lang="ko" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Pretendard"; font-weight: 800; src: url("assets/fonts/Pretendard-ExtraBold.otf"); }
+      @font-face { font-family: "Pretendard"; font-weight: 900; src: url("assets/fonts/Pretendard-Black.otf"); }
+      :root { --main: #6b3e26; --accent: #e9b44c; --ink: #1f1a17; --safe-l: 120px; --safe-w: 770px; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #111; }
+      #root { position: relative; width: 100%; height: 100%; font-family: "Pretendard", sans-serif; background: #111; overflow: hidden; }
+      .scene { position: absolute; inset: 0; overflow: hidden; }
+      .ph { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+      .shade { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.45) 0%, rgba(0,0,0,0) 30%, rgba(0,0,0,0) 50%, rgba(0,0,0,.5) 70%, rgba(0,0,0,.2) 100%); }
+      #fixed { position: absolute; left: var(--safe-l); width: var(--safe-w); top: 296px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+      #fixed span { font-weight: 800; font-size: 58px; line-height: 1; padding: 14px 22px; color: var(--ink); }
+      #f1 { background: #fff; } #f2 { background: var(--accent); }
+      .cap { position: absolute; left: var(--safe-l); width: var(--safe-w); top: 1080px; text-align: center; color: #fff; font-weight: 900; font-size: 76px; line-height: 1.2; letter-spacing: -0.035em; -webkit-text-stroke: 9px rgba(0,0,0,.85); paint-order: stroke fill; }
+      .cap em { font-style: normal; color: var(--accent); }
+      #end { background: var(--main); }
+      #e-name { position: absolute; left: var(--safe-l); width: var(--safe-w); top: 560px; text-align: center; color: #fff; font-weight: 900; font-size: 120px; letter-spacing: -0.04em; }
+      #e-act { position: absolute; left: var(--safe-l); width: var(--safe-w); top: 760px; display: flex; justify-content: center; }
+      #e-act p { background: var(--accent); color: var(--ink); font-weight: 900; font-size: 60px; padding: 20px 40px; border-radius: 60px; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="15.5" data-width="1080" data-height="1920">
+      <!-- 장면마다: 사진 + 자막. 1번은 가장 예쁜 정면 컷(결과 먼저) -->
+      <div id="s1" class="clip scene" data-start="0" data-duration="3.2" data-track-index="1" data-track-kind="graphics" style="z-index:1">
+        <img id="s1-ph" class="ph" src="assets/photo/1.jpg" alt="" /><div class="shade"></div>
+        <div class="cap" id="s1-cap">[상품 이름]<br /><em>[한 줄 훅]</em></div>
+      </div>
+      <div id="s2" class="clip scene" data-start="3" data-duration="3.2" data-track-index="2" data-track-kind="graphics" style="z-index:2">
+        <img id="s2-ph" class="ph" src="assets/photo/2.jpg" alt="" /><div class="shade"></div>
+        <div class="cap" id="s2-cap">[손에 든 모습 자막]</div>
+      </div>
+      <div id="s3" class="clip scene" data-start="6" data-duration="3.2" data-track-index="3" data-track-kind="graphics" style="z-index:3">
+        <img id="s3-ph" class="ph" src="assets/photo/3.jpg" alt="" /><div class="shade"></div>
+        <div class="cap" id="s3-cap"><em>[특징 한 단어]</em></div>
+      </div>
+      <div id="s4" class="clip scene" data-start="9" data-duration="3.2" data-track-index="4" data-track-kind="graphics" style="z-index:4">
+        <img id="s4-ph" class="ph" src="assets/photo/4.jpg" alt="" /><div class="shade"></div>
+        <div class="cap" id="s4-cap">[가격 · 기간]</div>
+      </div>
+      <div id="fixed" class="clip" data-start="0" data-duration="12.2" data-track-index="6" data-track-kind="graphics" style="z-index:10">
+        <span id="f1">[고정 제목 1줄]</span><span id="f2">[고정 제목 2줄]</span>
+      </div>
+      <div id="end" class="clip scene" data-start="12" data-duration="3.5" data-track-index="5" data-track-kind="graphics" style="z-index:20">
+        <div id="e-name">[가게 이름]</div>
+        <div id="e-act"><p id="e-actp">[동네] · [행동 한 가지]</p></div>
+      </div>
+    </div>
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      const E = "power3.out";
+      // 사진: 들어올 때 살짝 밀고(page-slide) 천천히 확대·축소 번갈아(켄 번스)
+      [["s1", 0], ["s2", 3], ["s3", 6], ["s4", 9]].forEach(([id, s], k) => {
+        const zin = k % 2 === 0;
+        tl.fromTo(`#${id}-ph`, { scale: zin ? 1.0 : 1.12, x: k ? 80 : 0 }, { scale: zin ? 1.12 : 1.0, x: 0, duration: 3.2, ease: "none" }, s);
+        tl.fromTo(`#${id}-cap`, { y: 30, scale: 0.92 }, { y: 0, scale: 1, duration: 0.35, ease: "back.out(2)" }, s + (k ? 0.15 : 0));
+      });
+      tl.fromTo("#f1", { y: -20 }, { y: 0, duration: 0.3, ease: E }, 0);
+      tl.fromTo("#f2", { y: -20 }, { y: 0, duration: 0.3, ease: E }, 0.08);
+      tl.fromTo("#e-name", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: E }, 12.1);
+      tl.fromTo("#e-actp", { scale: 0.7, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.45, ease: "back.out(2.2)" }, 12.5);
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

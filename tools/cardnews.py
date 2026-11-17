@@ -24,6 +24,11 @@ items[].icon(번호 대신 아이콘), em_style("marker"/"box"/"color", 대비 3
 {"type":"chips","items"}, {"type":"table","head":[a,b],"rows":[[…]]}, {"type":"timeline","start","end","marks":[[시,라벨]]},
 bar(결론 띠 글자), cards(true면 흰 카드 목록, 체크리스트는 기본), tone "brand"/"deep"(brand.colors.deep), account(계정 이름 글자),
 photo_match(사진이 문구와 다르면 이유를 적음 → 경고). anchor.pos: top/mid/bottom. 점검: 콘텐츠 높이 60% 미만, 같은 바탕 3장 연속.
+0.5.0: art(이미지 생성 기능으로 만든 그림을 장에 넣기): "art": "art/cover.png" 또는
+{"path", "pos": top/mid/bottom/full, "h": 420(px, 1 이하면 세로 비율), "w": 1.0(칸 폭 비율), "fit": contain/cover,
+"radius", "focus", "wash"(full일 때 바탕색을 얹는 정도 0~0.9), "hint"(그림이 없을 때 칸에 적을 말)}.
+full은 장 바탕 전체를 그림으로 깔고 글자는 그대로 렌더러가 그린다(대비 점검이 그림 위에서 잰다). 투명 PNG 지원.
+그림 파일이 없으면 '그림 자리'를 그리고 '고칠 것'으로 막는다. 글자가 든 그림은 넣지 않는다(한글은 렌더러가 그림).
 
 Pillow가 있으면 PNG/JPEG를 바로 만든다. 없으면 --html 경로를 쓴다.
 폰트는 Pretendard(SIL OFL)를 공식 저장소에서 받아 캐시에 둔다. 실패하면 시스템 한글 폰트를 쓴다.
@@ -36,10 +41,10 @@ import re
 import sys
 import urllib.request
 
-VERSION = "0.4.0"
+VERSION = "0.5.0"
 
 try:
-    from PIL import Image, ImageDraw, ImageFont, ImageOps, ImageFilter
+    from PIL import Image, ImageChops, ImageDraw, ImageFont, ImageOps, ImageFilter
     HAS_PIL = True
 except ImportError:  # Pillow 없음 → --html 경로
     HAS_PIL = False
@@ -52,7 +57,7 @@ TYPES = {
 }
 STYLES = {
     "S01": ("사진 그대로", True), "S02": ("사진 + 큰 제목", True), "S03": ("매거진", True),
-    "S04": ("브랜드 색", True), "S05": ("깔끔한 글자 카드", True), "S06": ("그림·캐릭터", False),
+    "S04": ("브랜드 색", True), "S05": ("깔끔한 글자 카드", True), "S06": ("그림·캐릭터(art 필요)", True),
     "S07": ("손글씨 메모", True), "S08": ("전단·특가", True), "S09": ("고급스러운", True),
     "S10": ("화면·메신저 모양", True), "S11": ("레트로(선택)", True),
 }
@@ -350,6 +355,54 @@ class Canvas:
             mask = Image.new("L", (bw, bh), 0)
             ImageDraw.Draw(mask).rounded_rectangle([0, 0, bw - 1, bh - 1], radius=radius, fill=255)
         self.img.paste(ph, (x0, y0), mask)
+
+    def fill(self, color):
+        """장 바탕을 칠한다. 배경 그림(art pos=full)이 있으면 단색 대신 그림을 깔고, wash만큼 바탕색을 얹는다."""
+        art = getattr(self, "art_bg", None)
+        if art is None:
+            self.img.paste(Image.new("RGB", (self.w, self.h), color), (0, 0))
+            return
+        base = Image.new("RGBA", (self.w, self.h), color + (255,))
+        base.alpha_composite(art)
+        wash = self.art_wash
+        if wash > 0:
+            base = Image.blend(base, Image.new("RGBA", (self.w, self.h), color + (255,)), wash)
+        self.img.paste(base, (0, 0))
+
+    def paste_art(self, a, box):
+        """생성 그림(일러스트·사물 컷·질감)을 칸 안에 놓는다. 투명 PNG는 투명 그대로, contain은 잘리지 않게."""
+        x0, y0, x1, y1 = [int(v) for v in box]
+        bw, bh = max(1, x1 - x0), max(1, y1 - y0)
+        path = a.get("path")
+        if not (path and os.path.exists(path)):
+            ph = Image.new("RGBA", (bw, bh), (226, 222, 214, 255))
+            d = ImageDraw.Draw(ph)
+            for i in range(-bh, bw, 40):
+                d.line([(i, 0), (i + bh, bh)], fill=(212, 206, 196), width=2)
+            fl = font("semibold", 34)
+            msg = f"그림 자리: {a.get('hint') or os.path.basename(path or '') or '생성 그림'}"
+            lines = [plain("".join(t for t, _ in ln)) for ln in wrap(msg, fl, bw - 80)][:3]
+            yy = bh / 2 - len(lines) * 24
+            for ln in lines:
+                d.text(((bw - fl.getlength(ln)) / 2, yy), ln, font=fl, fill=(90, 84, 76))
+                yy += 48
+            self.notes = getattr(self, "notes", []) + [f"그림 없음: {path or '경로 없음'}"]
+            self.img.alpha_composite(ph, (x0, y0))
+            return
+        im = ImageOps.exif_transpose(Image.open(path)).convert("RGBA")
+        if a.get("fit") == "cover":
+            im = ImageOps.fit(im, (bw, bh), Image.LANCZOS, centering=tuple(a.get("focus", (0.5, 0.5))))
+            px, py = x0, y0
+        else:  # contain: 그림 전체가 보이게 줄여 칸 가운데에 둔다
+            k = min(bw / im.width, bh / im.height)
+            im = im.resize((max(1, int(im.width * k)), max(1, int(im.height * k))), Image.LANCZOS)
+            px, py = x0 + (bw - im.width) // 2, y0 + (bh - im.height) // 2
+        r = int(a.get("radius", 28 if a.get("fit") == "cover" else 0))
+        if r:
+            mask = Image.new("L", im.size, 0)
+            ImageDraw.Draw(mask).rounded_rectangle([0, 0, im.width - 1, im.height - 1], radius=r, fill=255)
+            im.putalpha(ImageChops.multiply(im.getchannel("A"), mask))
+        self.img.alpha_composite(im, (px, py))
 
     def gradient(self, y_from, y_to, color=(0, 0, 0), a_from=0, a_to=170):
         h = int(y_to - y_from)
@@ -781,6 +834,11 @@ class Block:
                 bh = 128
                 ops.append((y, ("button", val, fb, bh, opt)))
                 y += bh + gap
+            elif kind == "art":  # 생성 그림: 글이 넘치면 그림도 함께 줄인다(최대 60%까지)
+                ah = val["h_px"] * min(1.0, max(self.scale, 0.6))
+                aw = w * min(1.0, float(val.get("w", 1.0)))
+                ops.append((y, ("art", val, x0 + (w - aw) / 2, aw, ah)))
+                y += ah + gap
             elif kind == "space":
                 y += val * self.scale
         if self.items:
@@ -811,7 +869,8 @@ class Block:
                 pk, pv, po = self.items[i - 1]
                 tight = pk == "kicker" or (pk == "text" and po.get("role") == "key" and po.get("tight"))
                 wts.append(0 if tight else (1.6 if self.items[i][0] in ("anumber", "flow", "compare", "table", "bar", "items",
-                                                                              "timeline", "button", "chips", "icon") else 1))
+                                                                              "timeline", "button", "chips", "icon", "art")
+                                       else 1))
             tw = sum(wts) or 1
             per = min((avail - h) / tw, getattr(self, "spread_cap", 150))
             shift, acc = [0.0], 0.0
@@ -1020,6 +1079,9 @@ class Block:
                 for ln in lines:
                     cv.text(tx, yy, ln, f, opt.get("color", pal["text"]), opt.get("em"), opt.get("role", "body"))
                     yy += size * 1.45
+            elif kind == "art":
+                _, a, ax, aw, ah = op
+                cv.paste_art(a, (ax, y, ax + aw, y + ah))
             elif kind == "big":
                 _, val, f, size, opt = op
                 tw = f.getlength(val)
@@ -1041,7 +1103,7 @@ def safe_box(W, H):
     return 72, max(top, 80), W - 72, min(H - top, H - 96)
 
 
-VISUAL_KEYS = ("items", "menu", "compare", "big", "anchor", "photo", "info")
+VISUAL_KEYS = ("items", "menu", "compare", "big", "anchor", "photo", "info", "art")
 
 
 def em_style(c, pal, style):
@@ -1096,6 +1158,9 @@ def add_content(b, s, pal, cover, colors=None):
         anchor = {"type": "icon", "name": pick_icon((s.get("heading") or "") + (s.get("q") or "") + (s.get("text") or ""))}
         a_top = True
         b.auto_icon = True
+    art = s.get("art") if isinstance(s.get("art"), dict) and s["art"].get("pos") != "full" else None
+    if art and art["pos"] == "top":
+        b.add("art", art, gap=36)
     if s.get("kicker"):
         b.add("kicker", s["kicker"], fill=c.get("kicker_fill", pal["accent"]), gap=26)
     if a_top:
@@ -1122,6 +1187,8 @@ def add_content(b, s, pal, cover, colors=None):
               font="semibold" if s.get("a") else "regular", size=c.get("sub_size", 40) if cover else None, gap=34)
     if a_mid:
         add_anchor(b, anchor, c, pal, center=b.center_x)
+    if art and art["pos"] == "mid":
+        b.add("art", art, gap=34)
     if s.get("items"):
         mode = "check" if s.get("checklist") else ("step" if s.get("steps") else "number")
         b.add("items", s["items"], mode=mode, color=c["title"], sub=c["sub"], em=c["em_safe"],
@@ -1136,6 +1203,8 @@ def add_content(b, s, pal, cover, colors=None):
         b.add("info", s["info"], color=c["text"], label_color=c.get("label", pal["main"]), em=c["em_safe"])
     if anchor and not a_top and not a_mid:
         add_anchor(b, anchor, c, pal, center=b.center_x)
+    if art and art["pos"] == "bottom":
+        b.add("art", art, gap=34)
     if s.get("bar"):
         b.add("bar", s["bar"], fill=c.get("bar_fill", pal["text"]), em=pal["accent"], gap=30)
     if s.get("note"):
@@ -1190,7 +1259,7 @@ def style_paint(code, cv, s, pal, cover, W, H):
         return b
 
     if code == "S03":  # 매거진
-        cv.img.paste(Image.new("RGB", (W, H), pal["bg"]), (0, 0))
+        cv.fill(pal["bg"])
         ph_bottom = int(H * (0.6 if cover else 0.667))  # 위 60~67% 풀폭 사진
         cv.paste_photo(photo, (0, 0, W, ph_bottom), focus=focus, hint=hint)
         y = ph_bottom + 48
@@ -1204,7 +1273,7 @@ def style_paint(code, cv, s, pal, cover, W, H):
         return b
 
     if code == "S04":  # 브랜드 색: 표지·마지막 장에 주색을 통째로
-        cv.img.paste(Image.new("RGB", (W, H), pal["main"]), (0, 0))
+        cv.fill(pal["main"])
         on = pal["on_main"]
         if cover or s.get("role") == "cta":
             area_top = sy0
@@ -1233,7 +1302,7 @@ def style_paint(code, cv, s, pal, cover, W, H):
 
     if code == "S05":  # 깔끔한 글자 카드 (번호·체크 리스트)
         light, deep = tones(pal)
-        cv.img.paste(Image.new("RGB", (W, H), light), (0, 0))
+        cv.fill(light)
         hl = mix(pal["accent"], light, 0.25)
         base = dict(title=dark, em=dark, hl=hl, bg=light, title_gap=30, price=dark, line=mix(dark, light, 0.75),
                     fills=[mix(dark, light, 0.92), deep], heads=[pal["main"], pal["accent"]],
@@ -1247,7 +1316,7 @@ def style_paint(code, cv, s, pal, cover, W, H):
         if tone in ("dark", "brand", "deep") or s.get("role") == "cta":  # 어두운 장: 주색·짙은 색 바탕
             if tone == "deep":
                 deep = hex2rgb(s.get("deep") or pal.get("deep_hex") or "#111A3A")
-            cv.img.paste(Image.new("RGB", (W, H), deep), (0, 0))
+            cv.fill(deep)
             on = readable_on(deep)
             em = em_on(pal, deep, on)
             panel = mix(on, deep, 0.84)
@@ -1268,7 +1337,7 @@ def style_paint(code, cv, s, pal, cover, W, H):
 
     if code == "S07":  # 손글씨 메모
         paper = (246, 238, 220)
-        cv.img.paste(Image.new("RGB", (W, H), paper), (0, 0))
+        cv.fill(paper)
         for yy in range(sy0 + 40, H - 60, 64):
             cv.rect([60, yy, W - 60, yy + 2], (226, 214, 190))
         cv.tape = pal["accent"]  # 내용 위치가 정해진 뒤 render_slide에서 붙인다
@@ -1282,7 +1351,7 @@ def style_paint(code, cv, s, pal, cover, W, H):
 
     if code == "S08":  # 전단·특가 (이벤트)
         bgc = pal["accent"]
-        cv.img.paste(Image.new("RGB", (W, H), bgc), (0, 0))
+        cv.fill(bgc)
         for i in range(-H, W, 90):  # 사선 줄무늬
             cv.draw.line([(i, 0), (i + H, H)], fill=mix(bgc, white, 0.12), width=24)
         on = readable_on(bgc)
@@ -1303,7 +1372,7 @@ def style_paint(code, cv, s, pal, cover, W, H):
 
     if code == "S09":  # 고급스러운
         cream = (247, 243, 236)
-        cv.img.paste(Image.new("RGB", (W, H), cream), (0, 0))
+        cv.fill(cream)
         ink = (43, 43, 43)
         y = sy0
         if photo or hint:
@@ -1321,7 +1390,7 @@ def style_paint(code, cv, s, pal, cover, W, H):
 
     if code == "S10":  # 화면·메신저 모양 (Q&A)
         chat_bg = mix(pal["main"], white, 0.82)
-        cv.img.paste(Image.new("RGB", (W, H), chat_bg), (0, 0))
+        cv.fill(chat_bg)
         if cover:
             cv.rect([72, sy0 + 120, W - 72, sy0 + 250], white, radius=65)
             cv.draw.ellipse([W - 72 - 108, sy0 + 152, W - 72 - 52, sy0 + 208], outline=pal["main"], width=8)
@@ -1335,10 +1404,12 @@ def style_paint(code, cv, s, pal, cover, W, H):
         light, deep = tones(pal)
         dk = s.get("tone") == "dark"
         bgc = deep if dk else light
-        cv.img.paste(Image.new("RGB", (W, H), bgc), (0, 0))
+        cv.fill(bgc)
         on = readable_on(bgc)
         ems = em_on(pal, bgc, on)
         b = Block(cv, (84, sy0, W - 84, sy1), pal, {"heading": "black"}, align="center", sizes={"heading": 88, "qa": 42})
+        if isinstance(s.get("art"), dict) and s["art"]["pos"] in ("top", "mid", "bottom"):
+            b.add("art", s["art"], gap=36)
         if s.get("_qn"):
             b.add("text", f"Q{s['_qn']}.", size=60, font="black", color=ems, role="key", gap=14)
         head = s.get("q") or s.get("heading")
@@ -1360,7 +1431,7 @@ def style_paint(code, cv, s, pal, cover, W, H):
     if code == "S11":  # 레트로: 누런 종이 + 두 줄 테두리 + 그림자 글자
         paper = (241, 228, 200)
         red, green, ink = (196, 52, 38), (34, 96, 70), (40, 30, 24)
-        cv.img.paste(Image.new("RGB", (W, H), paper), (0, 0))
+        cv.fill(paper)
         for k in range(0, H, 6):  # 종이 결
             cv.rect([0, k, W, k + 1], mix(paper, (200, 180, 140), 0.12))
         cv.rect([20, 20, W - 20, H - 20], paper, outline=ink, width=6)
@@ -1383,8 +1454,13 @@ def render_slide(spec, s, idx, total, pal, W, H, base_dir):
     s = dict(s, role=role)
     if s.get("photo") and not os.path.isabs(s["photo"]):
         s["photo"] = os.path.join(base_dir, s["photo"])
+    s["art"] = art_spec(s.get("art"), base_dir, H)
     code = s.get("style") or (spec.get("cover_style") if role == "cover" else spec.get("body_style")) or "S05"
     notes = []
+    if code == "S06":  # 그림·캐릭터: 생성 그림(art)을 얹은 글자 카드
+        if not s.get("art"):
+            notes.append("그림 필요: S06은 art(생성 그림)가 있어야 해요 → 글자 카드(S05)로 그림")
+        code = "S05"
     if code not in STYLES or not STYLES[code][1]:
         notes.append(f"{code}는 렌더러에 아직 없어 S05로 대신 그림")
         code = "S05"
@@ -1407,6 +1483,14 @@ def render_slide(spec, s, idx, total, pal, W, H, base_dir):
             s["tone"] = mode
     cv = Canvas(W, H, pal["bg"])
     cv.pal_accent = pal["accent"]
+    art = s.get("art")
+    if art and art["pos"] == "full":  # 바탕 전체 그림: 스타일이 바탕을 칠할 때 단색 대신 깐다
+        if art.get("path") and os.path.exists(art["path"]):
+            im = ImageOps.exif_transpose(Image.open(art["path"])).convert("RGBA")
+            cv.art_bg = ImageOps.fit(im, (W, H), Image.LANCZOS, centering=tuple(art.get("focus", (0.5, 0.5))))
+            cv.art_wash = max(0.0, min(0.9, float(art.get("wash", 0))))
+        else:
+            notes.append(f"그림 없음: {art.get('path') or '경로 없음'}")
     b = style_paint(code, cv, s, pal, role == "cover", W, H).render()
     if getattr(cv, "tape", None):  # 손글씨 메모: 내용 바로 위에 마스킹테이프
         tape = Image.new("RGBA", (300, 70), cv.tape + (170,))
@@ -1435,6 +1519,19 @@ def render_slide(spec, s, idx, total, pal, W, H, base_dir):
     bg = cv.finish()
     notes += getattr(cv, "notes", [])
     return cv.img.convert("RGB"), bg, cv.texts, b, code, notes, s
+
+
+def art_spec(a, base_dir, H):
+    """art 칸을 한 모양으로: 문자열이면 경로. h가 1 이하면 세로 비율(0.3 = 405px)."""
+    if not a:
+        return None
+    a = {"path": a} if isinstance(a, str) else dict(a)
+    if a.get("path") and not os.path.isabs(a["path"]):
+        a["path"] = os.path.join(base_dir, a["path"])
+    a["pos"] = a.get("pos", "top") if a.get("pos", "top") in ("top", "mid", "bottom", "full") else "top"
+    h = float(a.get("h", 420))
+    a["h_px"] = max(120, min(H * 0.6, h * H if h <= 1 else h))
+    return a
 
 
 def chrome(cv, spec, idx, total, W, H):
@@ -1503,7 +1600,7 @@ def check_slide(n, s, texts, bg, block, W, H):
         res.append(("FAIL", "넘침", "최소 글자 크기로 줄여도 칸을 넘음 → 글을 줄이거나 장을 나누세요"))
     elif block.scale < 1:
         res.append(("WARN", "과밀", f"글자를 {int(block.scale * 100)}%로 줄여서 맞춤 → 글을 줄이면 더 잘 읽혀요"))
-    if not (s.get("photo") or s.get("photo_hint")):  # 사진 장은 사진이 공간을 채운다
+    if not (s.get("photo") or s.get("photo_hint") or (s.get("art") or {}).get("pos") == "full"):  # 사진·바탕 그림 장은 그림이 공간을 채운다
         ys = [bb[1] for t in texts if t["role"] != "minor" for bb, _ in t.get("boxes", [])]
         ye = [bb[3] for t in texts if t["role"] != "minor" for bb, _ in t.get("boxes", [])]
         if ys:
@@ -1610,11 +1707,13 @@ def cmd_render(a):
                 rows.append((f"{i + 1}장", "FAIL", "용량", f"JPEG {mb:.1f}MB (8MB 이하)"))
             files.append(stem + ".jpg")
         res = check_slide(i + 1, s2, texts, bg, block, W, H)
-        res += [("WARN", "참고", n) for n in notes]
+        res += [("FAIL", "그림 없음", n.split(": ", 1)[-1] + " → 생성한 그림 파일 경로를 확인하세요") if n.startswith("그림 없음")
+                else ("WARN", "참고", n) for n in notes]
         if getattr(block, "auto_icon", False):
             res.append(("WARN", "시각 앵커", "숫자·사진·도식이 없어 아이콘을 자동으로 넣음 → anchor로 숫자·도식을 지정하면 더 좋아요"))
         rows += [(f"{i + 1}장({code})", *r) for r in res]
-        bgs.append(bg.getpixel((W - 6, 6)) if not s2.get("photo") else ("photo", i))
+        full_art = (s2.get("art") or {}).get("pos") == "full"
+        bgs.append(bg.getpixel((W - 6, 6)) if not (s2.get("photo") or full_art) else ("photo", i))
         sigs.append((code, s2.get("tone"), tuple(sorted({k for k, _, _ in block.items if k not in ("space", "rule")}))))
         report.append({"slide": i + 1, "style": code, "files": files,
                        "checks": [dict(level=r[0], item=r[1], message=r[2]) for r in res]})
@@ -1645,9 +1744,13 @@ def cmd_check(a):
     spec = load_spec(a.spec)
     pal = palette(spec.get("brand", {}))
     rows = [("전체", *r) for r in deck_checks(spec)]
+    base_dir = os.path.dirname(os.path.abspath(a.spec))
     for i, s in enumerate(spec["slides"]):
         s = dict(s, role=s.get("role", "cover" if i == 0 else "body"))
         rows += [(f"{i + 1}장", *r) for r in text_checks(s)]
+        art = art_spec(s.get("art"), base_dir, 1350)
+        if art and not (art.get("path") and os.path.exists(art["path"])):
+            rows.append((f"{i + 1}장", "FAIL", "그림 없음", f"art 파일이 없음: {art.get('path') or '경로 없음'}"))
     for k in ("main", "accent"):
         r = contrast(pal[k], readable_on(pal[k]))
         if r < 4.5:
@@ -1704,13 +1807,24 @@ def cmd_html(spec, out, base_dir):
                 inner += '<div class="grad"></div>'
                 cls.append("bottom")
                 txt = pal["white"]
+        art = art_spec(s.get("art"), base_dir, 1350)
+        art_img = ""
+        if art:
+            src = html.escape(os.path.relpath(art["path"], out)) if art.get("path") else ""
+            if art["pos"] == "full":
+                inner += f'<div class="ph" style="background-image:url(\'{src}\')"></div>'
+            else:
+                fit = "cover" if art.get("fit") == "cover" else "contain"
+                art_img = (f'<img src="{src}" alt="" style="width:{float(art.get("w", 1)) * 100:.0f}%;height:{art["h_px"]:.0f}px;'
+                           f'object-fit:{fit};border-radius:{int(art.get("radius", 28 if fit == "cover" else 0))}px;'
+                           f'align-self:center;margin:0 0 34px">')
         if code in ("S04",):
             bgc, txt = pal["main"], pal["on_main"]
         if code == "S08":
             bgc, txt = pal["accent"], pal["on_accent"]
         if code == "S10":
             bgc = mix(pal["main"], pal["white"], 0.82)
-        body = ""
+        body = art_img if art and art["pos"] == "top" else ""
         if s.get("kicker"):
             body += f'<span class="kicker">{html.escape(s["kicker"])}</span>'
         if s.get("big"):
@@ -1721,6 +1835,8 @@ def cmd_html(spec, out, base_dir):
         t = s.get("subtitle") if role == "cover" else s.get("text")
         if t:
             body += f"<p>{em(t)}</p>"
+        if art and art["pos"] == "mid":
+            body += art_img
         if s.get("items"):
             lis = ""
             for k, it in enumerate(s["items"], 1):
@@ -1734,6 +1850,8 @@ def cmd_html(spec, out, base_dir):
             body += f'<div class="bubble a">{em(s["a"])}</div>'
         if s.get("info"):
             body += '<div class="info">' + "".join(f"<div><b>{html.escape(a)}</b>{em(b)}</div>" for a, b in s["info"]) + "</div>"
+        if art and art["pos"] == "bottom":
+            body += art_img
         if code in ("S04", "S08") and role != "cover":
             body = f'<div class="panel" style="color:{hexc(pal["text"])}">{body}</div>'
         inner += f'<div class="box">{body}</div>'
