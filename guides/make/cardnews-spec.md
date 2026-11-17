@@ -1,79 +1,78 @@
-# 카드뉴스 원고 JSON 칸 (렌더러 0.5.0)
+# 카드뉴스 원고 JSON 칸 (HTML 템플릿, `tools/cardnews_html.py` 1.0)
 
-`guides/make/cardnews.md` 4) 단계에서 원고 JSON을 쓸 때만 연다. 견본 두 개를 먼저 본다:
-- `examples/cardnews-spec-sample.json` — 동네 빵집 신메뉴(C01). 사진 장·`photo_match`·`사진 필요` 처리 예시. 결과 `examples/cardnews-sample/`.
-- `examples/cardnews-spec-faq-sample.json` — 가상 B2B 회사의 자주 묻는 질문(C07). 앵커 종류를 장마다 바꾼 예시(chips·number·flow·table·vs·button), `tone` brand/deep, `account`.
+`guides/make/cardnews.md` 4) 단계에서 원고 JSON을 쓸 때만 연다. 견본을 먼저 본다:
+- `tests/runs/r17-cardnews-html/work/bakery.json` — 동네 빵집 신메뉴(C01), 갈래 B. 표지는 이미지 생성(글자 포함), 본문은 캐릭터 + 레이아웃 7종.
+- `tests/runs/r17-cardnews-html/work/wkl.json` — B2B 정보형(C06), 갈래 B.
+- `gallery/cardnews/src/*.json` — 갈래 A(사진)·C(매거진)와 메뉴·이벤트·공지·예약·FAQ.
+- 크롬이 없어서 Pillow로 그릴 때는 `guides/make/cardnews-spec-pillow.md`.
 
 ## 전체 칸
 
 | 칸 | 뜻 |
 |---|---|
-| `brand.colors` | `main`(주색), `accent`(강조), `bg`(밝은 바탕), `text`(글자, 먹색), `deep`(짙은 바탕, 없으면 짙은 남색) — 헥스 값 |
-| `cover_style`, `body_style` | 표지·본문 스타일 코드(S01~S11). 장마다 `style`로 바꿀 수 있다 |
-| `body_tone` | 본문 장 기본 바탕: `light`(기본)/`dark`/`alternate`(밝은 장·어두운 장 번갈아) |
-| `account` | 계정 이름 **글자**(예: `"후스키랩스"`). 본문은 왼쪽 아래 작게, 표지·마지막 장은 조금 크게. 로고 그림이 아니다 |
-| `em_style` | `*강조*`를 그리는 법: `marker`(형광펜), `box`(상자), `color`(글자색). 안 쓰면 자동, 강조색 대비가 3:1 미만이면 `box`로 바꾼다. 장마다 덮어쓸 수 있다 |
-| `chrome` | `true`면 머리말(`series`)·쪽번호·진행 막대를 그린다. **기본 끔** |
-| `swipe_arrow` | 표지 오른쪽 아래 '넘겨서 보기 →'. 기본 켬, **표지에만** 그린다 |
-| `series` | `chrome` 켰을 때 왼쪽 위 이름(없으면 표지 `kicker`) |
+| `theme` | 갈래 `A`(실사진 + 하단 큰 흰 글씨) / `B`(캐릭터 일러스트 + 큰 제목, 크림 바탕) / `C`(미니멀 매거진, 검정 바탕 + 형광 1색). 장마다 `theme`로 바꿀 수 있다 |
+| `brand.colors` | `bg`(바탕) `text`(글자) `main`(라벨·띠·번호·버튼) `accent`(강조 1색: 핵심어·숫자) `marker`(형광펜) `sub`(보조 글자). 프로필 '우리 가게 색' 헥스 |
+| `series`, `ep` | **시리즈 틀**: 왼쪽 위 라벨(예: "밀과결 겨울 메뉴" + "EP.1"). 매주 같은 이름, 회차만 바꾼다 |
+| `account` | 아래 띠의 계정 이름 글자(로고 그림이 아니다). C는 `account_vertical: ["치과","한장"]`처럼 세로 두 줄 |
+| `page_numbers` | 오른쪽 위 `2/8` 쪽번호. 기본 켬 |
+| `chrome` | 머리말·꼬리말 전체. 기본 켬(레퍼런스 25곳 중 21곳이 시리즈 틀을 고정). 장마다 `false` 가능 |
+| `css` | 이 원고에만 더할 CSS 한 줄(예외 때만) |
 
-## 장 칸 (`slides[]`)
+## 장 칸 (`slides[]`) — `layout`이 핵심
+
+| `layout` | 쓰는 때 | 칸 |
+|---|---|---|
+| `image` | 이미지 생성 표지·단독 포스터를 꽉 채울 때 | `image`(경로). 위에 라벨·쪽번호·아래 띠가 얹힌다 → 그림은 위 13%·아래 7%를 비워 만든다 |
+| `cover` | HTML 표지 | `kicker`, `title`(2~4줄), `subtitle`, `photo`(있으면 꽉 채우고 아래 어둡게 = 갈래 A), `focus`("50% 40%"), `t_size` |
+| `list` | "○가지", 가격·조건 3개 | `items:[{title,text}]` (2~4개) |
+| `vs` | A vs B, 해도 되는 것·안 되는 것 | `left`/`right: {label, items}`, `good: "right"`, `vs_mark` |
+| `qa` | 자주 묻는 질문 | `q`(크게, 앞에 Q.), `lead`, `a`(아래 결론 상자) |
+| `number` | 숫자 하나(가격·기간·횟수) | `value`, `unit`, `label`, `chips`, `value_size`, `chips_w` |
+| `checklist` | 저장용 요약(마지막 장 바로 앞) | `items`, `tape: true`(마스킹 테이프) |
+| `steps` | 1→2→3 순서 | `items:[{title,text,img}]` — `img`는 그 단계 소품 그림(투명 PNG) |
+| `text` | 설명·공감 한 장 | `heading`, `lead` + 그림 |
+| `photo` | 사진 칸 + 짧은 글(갈래 A 본문) | `photo`, `heading`, `text` |
+| `cta` | 마지막 장, 행동 1개 | `title`, `text`, `info:[[이름,값]]`, `button`, `button_color`, `save`(작은 안내) |
+
+모든 장에 쓸 수 있는 칸:
 
 | 칸 | 뜻 |
 |---|---|
-| `role` | `cover`(1장), `body`, `cta`(마지막 장) |
-| 글 | `title`(표지·CTA), `subtitle`, `kicker`(작은 꼬리표), `heading`, `text`, `note`(작은 주의 문구) |
-| `tone` | 장 바탕: `light`, `dark`, `brand`(주색 바탕), `deep`(`brand.colors.deep` 바탕) |
-| `items` | 번호 리스트. `checklist: true`면 체크, `steps: true`면 단계로 이음. `items[].icon`이면 번호 대신 아이콘 |
-| `cards` | `true`면 항목을 흰 카드로(체크리스트는 기본 켬, `false`로 끔) |
-| `bar` | 장 아래 **요약 막대**(결론 한 줄, 진한 띠). `*강조*` 가능 |
-| `compare`, `menu`, `info` | 두 칸 비교 `[{label, items}, …]` / 메뉴·가격표 `[[이름, 가격, 한 줄], …]` / `[["위치","…"], …]` |
-| `q`·`a` | 질문(제목처럼 크게, 질문이 2개 이상이면 Q1·Q2 자동)·답 |
-| `big`, `kicker_en` | S08 큰 숫자, S03 영문 소제목 |
-| `photo` | 원고 파일 기준 사진 경로. `photo_hint`(사진 없을 때 칸에 적을 말), `photo_focus`([0.5,0.3] 살릴 위치) |
-| `photo_match` | 사진이 문구와 **다를 때 그 이유**를 적는다(예: `"밤 크루아상이 아닌 일반 크루아상 사진"`). 적으면 점검에 '확인 필요'가 뜬다. 맞으면 안 쓴다 |
-| `anchor` | 장의 시각 앵커(아래 표). `pos`: `top`/`mid`/`bottom` |
-| `art` | 이미지 생성으로 만든 그림(아래 '그림 칸'). 문자열이면 경로만 |
+| `kicker`, `heading`, `lead`(또는 `text`), `note` | 작은 머리말(강조색) / 큰 제목 / 보조 글 / 맨 아래 작은 주의 |
+| `conclude`, `conclude_icon` | 아래 **결론 상자**(한 줄 요약, 왼쪽 위 동그란 아이콘). 정보형 장의 기본 마무리 |
+| `art` | 그림 목록 `[{src, left/right/top/bottom, w, h, blend, round}]` — px 절대 위치. 투명 PNG 권장 |
+| `bubbles` | 말풍선 `[{text, left, top, w, size, tail: "right"/"side"}]` — 캐릭터 입 쪽으로 꼬리를 둔다 |
+| `stickers` | 자유 글자 `[{text, left, top, size, font: "hand"/"title", rotate, color, bg}]` — 손글씨 메모, 그림 속 시계판 숫자 등 |
+| `gap` | 본문과 결론 상자 사이 간격 px(없으면 남는 높이를 채움) |
+| `h_size`, `body_top`, `body_bottom`, `body_right`, `align: "center"` | 미세 조정(예외 때만) |
 
-## 시각 앵커 (`anchor`) — 장마다 하나
+## 글 표기
 
-| `type` | 쓰는 법 | 쓸 때 |
-|---|---|---|
-| `number` | `{"value":"4,800원","label":"밤 크루아상 1개"}` + `chips:[…]`(숫자 옆 칩) 또는 `band:[…]`(숫자 아래 칸) | 가격·기간·개수 한 개를 크게 |
-| `icon` | `{"name":"clock"}` | 숫자가 없는 설명 장 |
-| `flow` | `{"steps":[{"label":"카톡으로\n일 알려 주기","icon":"chat"}, …]}` | 순서(예약 방법, 진행 단계) |
-| `vs` | `{"left":{"label","items"},"right":{…}}` | A와 B 비교, 해도 되는 것·안 되는 것 |
-| `button` | `{"text":"카카오톡 채널 열기","color":"#FEE500"}` | 마지막 장 행동 |
-| `chips` | `{"items":["Q1 …","Q2 …"]}` | 표지 목차, 키워드 묶음 |
-| `table` | `{"head":["바뀐 것","한 일"],"rows":[[…],[…]]}` | 짝으로 된 정보 3~4줄 |
-| `timeline` | `{"start":10,"end":20,"marks":[[11,"11시 20개"],[15,"15시 20개"]]}` | 시간대(굽는 시간, 영업시간) |
+- `*핵심어*` → 강조색 글자. `==핵심어==` → 붓으로 그은 형광펜. `\n` → 줄바꿈. **한 장에 강조 2곳까지, 빨강(강조색)은 한 번.**
+- 한글은 어절 단위로 줄이 바뀐다(`word-break: keep-all`). 제목은 원고에서 `\n`으로 직접 끊는다(레퍼런스처럼 의미 단위로).
+- 제목이 칸을 넘으면 렌더러가 글자를 줄이고(최대 38%) `[주의] 제목을 줄여 맞춤`을 띄운다. 글이 칸을 넘치면 `[고칠 것]`.
 
-아이콘 이름: check arrow clock chat bulb calendar won wrench user cup star phone.
-`pos` 기본: `number`·`icon`은 `top`(제목 위), 나머지는 글 아래. `mid`는 본문 글과 항목 사이.
+## 크기 위계 (1080 폭, `templates/cardnews-html/base.css` 토큰)
 
-긴 숫자는 숫자와 단위 사이에 띄어쓰기를 넣는다(예: `"3,100만 원"`). 렌더러가 넘칠 때 단위를 아랫줄로 내리고, 그래도 넘치면 칩을 숫자 아래로 옮긴다. 잘리면 check가 '잘림'을 고칠 것으로 낸다.
-앵커·사진·리스트가 하나도 없는 본문 장은 렌더러가 아이콘을 자동으로 넣고 '시각 앵커' 주의를 띄운다.
+| 자리 | 크기 |
+|---|---|
+| 표지 제목 | 112~132px(B는 132), 2~4줄 |
+| 본문 장 제목 | 갈래 A 80 · B 102 · C 76px |
+| 항목 제목 / 본문 | 50px / 36~38px (최소 34px) |
+| 큰 숫자 | 300px(조정 `value_size`) |
+| 라벨·쪽번호 | 26px |
 
-## 그림 칸 (`art`) — 생성 그림 넣기
+## 그림 준비 (`art`)
 
-만드는 법·상한·금지는 `guides/make/image-gen.md`. 그림 안에 글자를 넣지 않는다(글자는 렌더러가).
+- 이미지 생성으로 **캐릭터 시트(2×2 포즈 4개)** 를 먼저 만들고, 칸별로 잘라 쓴다(같은 캐릭터가 장마다 다른 포즈). 나머지 장면·소품은 시트를 참조 이미지로 넣어 만든다.
+- 생성 그림의 단색 바탕은 `python3 cardnews_html.py cutout art/*.png -o art/cut --drop-edge`로 투명하게 뺀다(가장자리에 걸친 옆 칸 조각도 지움). 바탕을 안 빼면 네모 테두리가 보인다.
+- 사장님 실제 사진은 `photo`(cover·photo 레이아웃)로. 그림으로 바꾸지 않는다.
 
-| 칸 | 뜻 | 기본 |
-|---|---|---|
-| `path` | 원고 파일 기준 그림 경로(PNG 투명 배경 가능, JPEG) | — |
-| `pos` | `top`(제목 위) / `mid`(본문 글 아래, 항목 위) / `bottom`(항목·앵커 아래, 요약 막대 위) / `full`(장 바탕 전체) | `top` |
-| `h`, `w` | 높이 px(1 이하면 세로 비율, 0.3 = 405px, 최대 60%) / 칸 폭 비율(0.5 = 절반, 가운데 정렬) | 420, 1.0 |
-| `fit` | `contain`(그림 전체가 보이게, 투명 PNG에 알맞음) / `cover`(칸을 꽉 채우고 잘라냄) | `contain` |
-| `radius`, `focus` | 둥근 모서리 px / `cover`일 때 살릴 위치 [x, y] | cover 28·contain 0 / [0.5, 0.5] |
-| `wash` | `full`일 때 그림 위에 장 바탕색을 얹는 정도(0~0.9). 글자 대비가 모자라면 0.3~0.6 | 0 |
-| `hint` | 그림이 아직 없을 때 '그림 자리'에 적을 말 | — |
+## 명령
 
-- `full`은 어느 스타일이든 단색 바탕 대신 그림을 깐다. 글자 대비 점검은 그림 위에서 잰다. 그림 밝기를 장 `tone`에 맞춘다(밝은 그림은 light 장, 어두운 그림은 brand·deep 장).
-- 글이 넘치면 그림도 함께 줄인다(원래 높이의 60%까지). 그림 파일이 없으면 '그림 자리'를 그리고 '그림 없음'(고칠 것).
-- S06(그림·캐릭터)은 `art`가 있는 S05로 그린다. 예: 표지 `{"style":"S06", "art":{"path":"art/mascot.png","pos":"top","h":520}}`.
-
-## 렌더러가 알아서 하는 것
-
-- 본문 장은 **위(y 150)부터 아래(y 1190)까지** 채운다. 남는 높이는 항목 사이에 나눈다(위 정렬, 가운데 몰림 없음).
-- 크기: 본문 40px 이상, 장 제목 96~112px, 표지 제목은 가장 긴 줄이 폭 90%가 되게 자동.
-- 실제 사진이 없는 사진 스타일(S01·S02·S03·S09) 장은 글자 카드(S05)로 대신 그리고 '사진 필요'를 띄운다.
+```bash
+python3 cardnews_html.py render spec.json -o out/      # 01.png… + 01.jpg… + check.json + cardnews.html
+python3 cardnews_html.py sheet out/ -o sheet.png --ref r1.jpg r2.jpg r3.jpg r4.jpg   # 레퍼런스와 나란히 보는 시트
+python3 cardnews_html.py layouts                        # 갈래·레이아웃 목록
+```
+템플릿 파일(`templates/cardnews-html/`)이 스크립트 옆에 없으면 저장소에서 받아 `~/.cache/kr-cardnews/`에 둔다.

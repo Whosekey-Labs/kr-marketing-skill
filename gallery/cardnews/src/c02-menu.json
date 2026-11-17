@@ -1,0 +1,8 @@
+{"_설명":"가상 카페 '오후네시반' 메뉴판(C02), 갈래 A. 가격은 견본용 가상 값. 사진은 위키미디어 CC0(CREDITS.md).",
+ "type":"C02","theme":"A","series":"오후네시반 메뉴","ep":"겨울","account":"오후네시반 (가상)",
+ "brand":{"colors":{"main":"#2F5D50","accent":"#C2410C","marker":"#FDE7C7"}},
+ "slides":[
+  {"layout":"cover","photo":"photos/sf_f00.jpg","kicker":"오후네시반 겨울 메뉴","title":"겨울에 제일 많이\n찾는 *세 잔*","subtitle":"따뜻한 것만 골랐어요"},
+  {"layout":"list","kicker":"메뉴·가격","heading":"오늘 고르기\n어렵다면","items":[{"title":"카페 라테 *5,000원*","text":"우유 대신 오트도 돼요"},{"title":"뱅쇼 6,500원","text":"오후 4시 이후만"},{"title":"생강 라테 5,500원","text":"겨울 한정"}],"conclude":"가격은 견본용 가상 값이에요","conclude_icon":""},
+  {"layout":"photo","kicker":"라테 아트","heading":"한 잔씩\n*그려* 드려요","text":"주문 순서대로 한 잔씩 만들어요.","photo":"photos/latte_1.jpg"}
+ ]}

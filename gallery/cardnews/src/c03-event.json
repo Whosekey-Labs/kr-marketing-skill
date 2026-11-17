@@ -1,0 +1,9 @@
+{"_설명":"가상 카페 '오후네시반' 리뷰 이벤트(C03), 갈래 B(그림 없이 글자만). 기간·혜택은 견본용 가상 값.",
+ "type":"C03","theme":"B","series":"오후네시반 이벤트","ep":"12월","account":"오후네시반 (가상)",
+ "brand":{"colors":{"main":"#2F5D50","accent":"#C2410C","marker":"#FDD9A0"}},
+ "slides":[
+  {"layout":"cover","kicker":"12월 1일 ~ 14일","title":"리뷰 남기면\n*쿠키 하나*\n더 드려요","subtitle":"매장에서 리뷰 화면만 보여 주세요",
+   "art":[{"src":"photos/cookiebox_1.jpg","right":76,"bottom":120,"w":928,"h":430,"round":true,"blend":false}]},
+  {"layout":"steps","kicker":"참여 방법","heading":"딱 *3단계*면 끝","items":[{"title":"음료를 주문하고","text":"메뉴는 상관없어요"},{"title":"리뷰를 남긴 뒤","text":"사진 없어도 돼요"},{"title":"화면을 보여 주세요","text":"쿠키 하나를 더 드려요"}],"conclude":"1인 1회, 쿠키가 다 나가면 마감"},
+  {"layout":"number","kicker":"이벤트 기간","heading":"딱 2주만\n해요","value":"14","unit":"일간","label":"12월 1일(월) ~ 14일(일)","chips":["1인 1회","매장 이용만"]}
+ ]}

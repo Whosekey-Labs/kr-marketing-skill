@@ -22,6 +22,9 @@
 | Pretendard | https://github.com/orioncactus/pretendard | SIL Open Font License 1.1 |
 | Nanum Pen Script | https://fonts.google.com/specimen/Nanum+Pen+Script | SIL Open Font License 1.1 |
 | Gowun Batang | https://fonts.google.com/specimen/Gowun+Batang | SIL Open Font License 1.1 |
+| Gaegu | https://fonts.google.com/specimen/Gaegu | SIL Open Font License 1.1 (HTML 템플릿 손글씨 메모) |
+
+HTML 템플릿(`templates/cardnews-html`)은 위 폰트를 웹폰트 주소(jsDelivr의 Pretendard, Google Fonts)로 불러요.
 이 저장소에는 폰트 파일을 넣지 않았어요.
 
 ## 예시 사진 (카드뉴스 견본)
@@ -36,3 +39,6 @@
 
 ## 예시 사진 (블로그 갤러리 견본)
 `gallery/blog/`의 견본 화면(B01~B13, V1~V5)에 넣은 사진은 모두 위키미디어 공용의 CC0 1.0 사진이라 상업 이용과 수정이 가능해요. 가상 가게의 실제 매장·제품 사진이 아니에요. 사진마다 원본 주소·올린 사람·쓴 곳은 `gallery/blog/CREDITS.md`에 적었어요.
+
+## 예시 사진·그림 (카드뉴스 갤러리 견본)
+`gallery/cardnews/`의 새 견본(A·B·C, C01~C07)은 가상 브랜드('밀과결', '오후네시반', '코어숨')와 후스키랩스로 만든 예시예요. 사진은 위키미디어 공용 CC0 1.0 사진이고, 캐릭터·소품 그림은 이미지 생성 기능으로 만든 일러스트예요. 사진마다 원본 주소와 쓴 곳은 `gallery/cardnews/CREDITS.md`에 적었어요. 예전 Pillow 견본은 `gallery/cardnews/pillow/`에 있어요.

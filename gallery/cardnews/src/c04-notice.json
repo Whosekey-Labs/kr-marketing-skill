@@ -1,0 +1,48 @@
+{
+ "_설명": "가상 빵집 '밀과결' 임시 휴무 공지(C04), 갈래 C. 날짜는 견본용 가상 값.",
+ "type": "C04",
+ "theme": "C",
+ "series": "공지",
+ "account": "밀과결 (가상)",
+ "account_vertical": [
+  "밀과",
+  "결"
+ ],
+ "slides": [
+  {
+   "layout": "cover",
+   "kicker": "11월 20일(목)",
+   "title": "하루\n*쉬어 갑니다*",
+   "subtitle": "오븐 점검 때문에 하루 문을 닫아요",
+   "t_size": 180,
+   "stickers": [
+    {
+     "text": "CLOSED",
+     "left": 60,
+     "bottom": 180,
+     "size": 230,
+     "color": "rgba(198,243,94,.13)",
+     "weight": 900
+    }
+   ]
+  },
+  {
+   "layout": "number",
+   "kicker": "다시 여는 날",
+   "heading": "금요일엔\n평소대로",
+   "value": "21",
+   "unit": "일(금) 10시",
+   "label": "11시 첫 빵부터 그대로 구워요",
+   "chips": [
+    "예약 빵은 21일에 드려요"
+   ]
+  },
+  {
+   "layout": "cta",
+   "kicker": "미리 필요하시면",
+   "title": "19일까지\n*예약*해 주세요",
+   "text": "네이버 예약에서 받을 날짜를\n21일로 골라 주세요.",
+   "button": "네이버 예약하기 →"
+  }
+ ]
+}

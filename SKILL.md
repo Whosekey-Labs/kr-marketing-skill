@@ -21,7 +21,7 @@ description: 한국 소상공인·작은 브랜드의 AI 시니어 마케터. �
        urllib.request.urlretrieve(B + f, f)
    ```
    그다음 `python3 mk.py check`. 되면 **스크립트 모드**, 안 되면 **브라우저 모드**(같은 일을 네 브라우저로)로 기억하고 다시 시험하지 않는다.
-   - 나머지는 **처음 쓸 때만** 같은 방법으로 받는다: 카드뉴스 `cardnews.py`, 숏폼 `shortform.py`(Node·크롬이 있으면 HyperFrames `guides/make/shortform-hyperframes.md`, 없으면 이것 — 둘 다 같은 장면표), API 업로드 `upload_api.py`.
+   - 나머지는 **처음 쓸 때만** 같은 방법으로 받는다: 카드뉴스 `cardnews_html.py` + `templates/cardnews-html/`(크롬 없으면 대체 `cardnews.py`), 숏폼 `shortform.py`(Node·크롬이 있으면 HyperFrames `guides/make/shortform-hyperframes.md`, 없으면 이것 — 둘 다 같은 장면표), API 업로드 `upload_api.py`.
    - 지침 파일을 작업 폴더에 내려받아 둘 때는 경로를 살려 저장한다(`guides/make/cardnews.md`와 `guides/styles/cardnews.md`처럼 이름이 같은 파일이 있다).
    - 다음 대화에서 파일이 없으면 다시 받는다. 가끔 `python3 cardnews.py version`(숏폼은 `python3 shortform.py --version`)과 원문의 `VERSION = "…"` 줄을 비교해 다르면 다시 받는다.
    - 사장님이 "지침 업데이트해줘"라고 하면 이 파일과 필요한 단계 파일을 다시 읽고 기억을 고친다.
@@ -40,7 +40,7 @@ description: 한국 소상공인·작은 브랜드의 AI 시니어 마케터. �
 |---|---|---|
 | 0 | 상황 파악(5갈래) + 모드 | `guides/00-start.md` |
 | 1 | 묻기 전에 스스로 조사 → 확인 1번 → 이번 주 고칠 3가지 | `guides/01-research.md` + 업종 파일 1개(`guides/industries/index.md`에서 고름) + `guides/03-strategy.md` 3) |
-| 2 | 꼭 필요한 질문 (라운드 2번, 질문 8개 — 확인 메시지 포함 10개 이하) | `guides/02-interview.md` |
+| 2 | 꼭 필요한 질문 (라운드 2번, 질문 8개 — 확인 메시지 2개 포함 10개 이하. 영업신고 업종 같은 필수 사실은 세지 않고, 인스타 주소는 확인 메시지 2개 안에 든다) | `guides/02-interview.md` |
 | 3 | 목표·진단·브랜드 성격 카드·채널 등급·첫 4주 계획 → 브랜드 프로필 | `guides/03-strategy.md`, `guides/03-strategy-brand.md`(4-1 성격 카드 대응표·첫 제작 전 갈림 점검), `guides/profile-template.md` |
 | 4 | 매주 루프: 밀린 일 점검 → 제안 → 소재 → 레퍼런스 → **지금 올 이유** → 기획 → **제작 전 사실 확인** → 제작 → 검수 → 업로드 → 기록·반영 | `guides/04-weekly.md` (+ 그때 필요한 make/·upload/ 파일, 검수는 `guides/compliance/index.md`) |
 | 5 | 4주마다 회고 | `guides/05-monthly.md` |
@@ -53,6 +53,7 @@ description: 한국 소상공인·작은 브랜드의 AI 시니어 마케터. �
 ## 파일은 이 순서로만 연다 (사용량)
 
 첫 대화: `SKILL.md` → `00-start` → `01-research` → `industries/index.md`(업종 번호를 알면 건너뜀) → 업종 파일 1개 → `03-strategy`의 3)만 → `02-interview` → `03-strategy` 나머지(4-1에서 `03-strategy-brand`) → `profile-template`. 첫 제작: `04-weekly` → `06-reference` → `07-design-kit` + `styles/` 1개 → 이번 주 만들 형식의 `make/` 파일만 → `compliance/index.md` + 규제 플래그 검수표만.
+- **열 파일만 그때 받는다(미리 받아 두지 않는다).** 다음 단계·혹시 쓸 파일을 한꺼번에 내려받지 않는다. 받은 파일은 읽고 쓴다.
 - 긴 파일은 지금 단계의 절(`## 3)` 등)만 찾아 읽는다. 다른 단계 파일을 미리 열지 않는다.
 - `examples/`·`tools/` 소스는 명령이 실패했을 때만 연다. 도구 사용법은 `python3 도구.py --help`로 본다.
 - 이번 주 안 만드는 형식의 `make/` 파일, `08-operations`, `upload/`는 그 일이 생길 때만 연다.

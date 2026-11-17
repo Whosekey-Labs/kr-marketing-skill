@@ -18,7 +18,7 @@ npx --yes hyperframes browser ensure      # 렌더용 크롬(헤드리스)을 �
 ```
 
 - 하나라도 실패하면 고치려고 오래 붙잡지 않는다. 사장님 컴퓨터에 설치를 부탁해야 하면 대체 경로(2·3번)로 먼저 결과를 드리고 설치는 다음에 제안한다.
-- 에이전트 셸이 `npx … --옵션`을 다른 명령으로 바꿔 버리면(예: "Missing script: hyperframes") `node ~/.npm/_npx/*/node_modules/hyperframes/bin/hyperframes.mjs <명령>`으로 직접 부른다.
+- 에이전트 셸이 `npx … --옵션`을 다른 명령으로 바꿔 버리면(셸 별칭·훅. 예: "Missing script: hyperframes", "Unknown command: hyperframes") `node ~/.npm/_npx/*/node_modules/hyperframes/bin/hyperframes.mjs <명령>`으로 직접 부른다. 폴더가 여러 개면 가장 최근 것을 쓴다. `new.sh`는 npx가 실패하면 이 길로 스스로 바꾼다(환경변수 `HF_CLI`에 .mjs 경로를 주면 그것을 쓴다).
 - 렌더할 때 인터넷이 필요하다(GSAP 스크립트를 CDN에서 읽음).
 
 ## 1) 프로젝트 만들기
@@ -39,6 +39,7 @@ sh templates/shortform-hyperframes/new.sh <폴더> <템플릿>   # 원격이면 
 | `before-after.html` 전후 | G2 전후 | 전 사진 + 훅 → 닦아 내듯 후 사진 → 기간·금액·상담 | 같은 각도 전·후 2장 |
 
 - 그림·사진은 `assets/art/`·`assets/photo/`에 넣고 경로만 바꾼다. 생성 그림은 바탕을 뺀 투명 PNG가 카드 위에서 깔끔하다.
+- **사진과 글자를 맞춘다**(`guides/make/shortform.md` 4절 9·10): 자막·훅이 말하는 대상이 그 장면 사진에 없으면 장면을 '사진 필요'로 남기거나 문구를 화면에 보이는 사실로 바꾼다(자막은 타르트, 사진은 공간 → 안 됨). 남의 상표·로고가 보이는 사진은 넣지 않는다.
 - `[대괄호]`는 사장님 자료로만 채운다. 없는 장면은 지우고 뒤 장면의 `data-start`와 맨 위 `data-duration`을 당긴다(지어내지 않는다).
 - 색은 맨 위 `:root`의 `--bg`·`--main`·`--accent`(카드뉴스 `brand.colors`와 같은 값). 2안(기존 색 살린 안)은 `--accent`만 바꾼다.
 
@@ -81,6 +82,6 @@ npx hyperframes render --quality delivery -o out.mp4
 ffprobe -v error -show_entries format=duration -of csv=p=0 out.mp4   # 길이 = data-duration
 ```
 
-시트를 보고 최소 2번 고친다: ① 첫 프레임 훅이 다 보이나 ② 글자가 그림과 겹쳐 안 읽히는 곳(→ 흰 테두리 `paint-order: stroke`·상자) ③ 위 고정 제목과 카드가 붙거나 겹치나 ④ 자막이 두 줄을 넘나 ⑤ 가격·기간·수량이 사장님 자료와 같나. 고친 뒤 다시 `snapshot`.
+시트를 보고 최소 2번 고친다: ① 첫 프레임 훅이 다 보이나 ② 글자가 그림과 겹쳐 안 읽히는 곳(→ 흰 테두리 `paint-order: stroke`·상자) ③ 위 고정 제목과 카드가 붙거나 겹치나 ④ 자막이 두 줄을 넘나 ⑤ 가격·기간·수량이 사장님 자료와 같나 ⑥ 장면마다 글자가 말하는 대상이 사진에 보이나, 남의 상표가 보이지 않나. 고친 뒤 다시 `snapshot`.
 
 사장님이 직접 고치고 싶어 하면 "HyperFrames 데스크톱 앱에서 열면 글자를 눌러 바로 고칠 수 있어요"라고 한 번만 알린다(`npx hyperframes preview`).

@@ -1,0 +1,34 @@
+/* 갈래 B — 캐릭터 일러스트 + 큰 제목 (jungyul_labor·dontori_fire·smallfoot·doran_doran 형)
+ * 크림 바탕, 굵은 제목에 핵심어만 강조색, 같은 캐릭터가 장마다 말한다(말풍선), 아래 결론 상자. */
+.theme-b {
+  --bg: #F7F2E8; --bg2: #FFFFFF; --ink: #1E2A3A; --sub: #4B5563;
+  --main: #24476B; --accent: #D9402B; --marker: #FFD86B;
+  --line: rgba(30,42,58,.16);
+  --t-cover: 132px; --t-h: 102px;
+}
+.theme-b.card { background-image: radial-gradient(rgba(120,90,40,.06) 1.2px, transparent 1.4px); background-size: 9px 9px; }
+.theme-b .h, .theme-b .ctitle { font-weight: 900; }
+.theme-b .label::before { content: ""; width: 14px; height: 14px; border-radius: 50%; background: var(--marker); }
+.theme-b .list .item { border: 3px solid var(--ink); box-shadow: 6px 6px 0 var(--ink); }
+.theme-b .vs .col { border: 4px solid var(--ink); }
+.theme-b .vs .col.good { border-color: var(--main); box-shadow: 6px 6px 0 var(--main); }
+.theme-b .conclude { border-color: var(--ink); }
+.theme-b .memo { border: 4px solid var(--ink); box-shadow: 8px 8px 0 var(--ink); }
+.theme-b .hand { font-family: var(--f-hand); font-weight: 700; }
+/* 아래 브랜드 띠(시리즈 틀): 계정 이름 + 넘김 표시 */
+.theme-b .chrome-foot { bottom: 0; left: 0; right: 0; height: 72px; padding: 0 var(--pad); background: var(--main); color: rgba(255,255,255,.92); font-size: 26px; letter-spacing: .02em; }
+.theme-b .chrome-foot .swipe { color: #fff; font-size: 34px; }
+.theme-b .body { bottom: 112px; }
+/* 제목 양옆 강조 빗금(레퍼런스의 손그림 강조 표시) */
+.theme-b .spark { position: relative; }
+.theme-b .spark::before, .theme-b .spark::after { content: ""; position: absolute; top: 50%; width: 34px; height: 30px; background: repeating-linear-gradient(-60deg, transparent 0 6px, var(--accent) 6px 11px, transparent 11px 16px); transform: translateY(-50%); }
+.theme-b .spark::before { left: -46px; } .theme-b .spark::after { right: -46px; transform: translateY(-50%) scaleX(-1); }
+/* 갈래 B 손맛: 상자·말풍선·카드 테두리를 연필 선처럼 흔들리게 */
+.theme-b .conclude, .theme-b .bubble, .theme-b .list .item, .theme-b .vs .col, .theme-b .memo { border-color: transparent; }
+.theme-b .conclude::before, .theme-b .bubble::before, .theme-b .list .item::before, .theme-b .vs .col::before, .theme-b .memo::after {
+  content: ""; position: absolute; inset: -4px; border: 4px solid var(--ink); border-radius: inherit; filter: url(#rough); pointer-events: none; }
+.theme-b .vs .col.good::before { border-color: var(--main); }
+.theme-b .list .item, .theme-b .vs .col { position: relative; box-shadow: 5px 6px 0 rgba(30,42,58,.85); }
+.theme-b .conclude { box-shadow: 5px 6px 0 rgba(30,42,58,.12); }
+.theme-b .bubble::after { border-right-color: var(--ink); border-bottom-color: var(--ink); }
+.theme-b mark { transform: rotate(-1.5deg); display: inline-block; }

@@ -12,7 +12,40 @@ node -e 'process.exit(+process.versions.node.split(".")[0] >= 22 ? 0 : 1)' \
   || { echo "Node.js 22 이상이 필요해요. https://nodejs.org 에서 LTS 설치"; exit 2; }
 command -v ffmpeg >/dev/null || { echo "ffmpeg가 필요해요 (맥: brew install ffmpeg)"; exit 2; }
 
-npx --yes hyperframes init "$DIR" --resolution portrait --non-interactive --skip-skills >/dev/null
+# hyperframes CLI 찾기: npx가 셸 별칭·훅 때문에 실패하면 node로 CLI 파일을 직접 부른다.
+# 우선순위: 환경변수 HF_CLI(.mjs 경로) → npx → ~/.npm/_npx 안의 가장 높은 버전 → ~/.cache 에 설치
+find_cli() {
+  node -e '
+    const fs=require("fs"),path=require("path"),os=require("os");
+    const roots=[path.join(os.homedir(),".npm","_npx"),path.join(os.homedir(),".cache","hyperframes-cli")];
+    let best=null;
+    const cmp=(a,b)=>{a=a.split(/[.-]/).map(Number);b=b.split(/[.-]/).map(Number);
+      for(let i=0;i<3;i++){if((a[i]||0)!==(b[i]||0))return (a[i]||0)-(b[i]||0);}return 0;};
+    for(const r of roots){
+      let dirs=[];try{dirs=r.endsWith("_npx")?fs.readdirSync(r).map(d=>path.join(r,d)):[r];}catch(e){}
+      for(const d of dirs){const pk=path.join(d,"node_modules","hyperframes");
+        try{const v=JSON.parse(fs.readFileSync(path.join(pk,"package.json"))).version;
+          const bin=path.join(pk,"bin","hyperframes.mjs");
+          if(fs.existsSync(bin)&&(!best||cmp(v,best.v)>0))best={v,bin};}catch(e){}}
+    }
+    if(best)console.log(best.bin);'
+}
+HF_MODE=""
+if [ -n "$HF_CLI" ] && [ -f "$HF_CLI" ]; then HF_MODE=node
+elif npx --yes hyperframes --version 2>/dev/null | grep -q '[0-9]'; then HF_MODE=npx
+else
+  HF_CLI="$(find_cli)"
+  if [ -z "$HF_CLI" ]; then
+    npm install --silent --prefix "$HOME/.cache/hyperframes-cli" hyperframes >/dev/null 2>&1 || true
+    HF_CLI="$(find_cli)"
+  fi
+  [ -n "$HF_CLI" ] || { echo "hyperframes를 실행하지 못했어요. npx와 직접 호출 모두 실패 → 다른 렌더 경로(shortform.py)로 가세요."; exit 3; }
+  HF_MODE=node
+fi
+hf() { if [ "$HF_MODE" = npx ]; then npx --yes hyperframes "$@"; else node "$HF_CLI" "$@"; fi; }
+[ "$HF_MODE" = node ] && echo "npx 대신 직접 호출: node $HF_CLI"
+
+hf init "$DIR" --resolution portrait --non-interactive --skip-skills >/dev/null
 rm -f "$DIR/CLAUDE.md"   # 지침 파일은 AGENTS.md 하나만 둔다
 cp "$HERE/$TPL.html" "$DIR/index.html"
 mkdir -p "$DIR/assets/fonts" "$DIR/assets/photo" "$DIR/assets/art"
@@ -24,6 +57,7 @@ for w in SemiBold Bold ExtraBold Black; do
   else curl -fsSL "$PRET/Pretendard-$w.otf" -o "$f"; fi
 done
 
-npx --yes hyperframes browser ensure >/dev/null   # 렌더용 크롬(헤드리스) 확인·설치
+hf browser ensure >/dev/null   # 렌더용 크롬(헤드리스) 확인·설치
 echo "준비 끝: $DIR (사진은 $DIR/assets/photo, 그림은 $DIR/assets/art)"
-echo "다음: [대괄호] 채우기 → npx hyperframes check --json → snapshot → render --quality delivery -o out.mp4"
+if [ "$HF_MODE" = node ]; then HFCMD="node $HF_CLI"; else HFCMD="npx hyperframes"; fi
+echo "다음: [대괄호] 채우기 → $HFCMD check --json → snapshot → render --quality delivery -o out.mp4"

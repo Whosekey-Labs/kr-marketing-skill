@@ -1,0 +1,8 @@
+{"_설명":"가상 필라테스 '코어숨' 첫 수업 예약 안내(C05), 갈래 A. 주소·시간은 견본용 가상 값. 사진은 위키미디어 CC0.",
+ "type":"C05","theme":"A","series":"코어숨 첫 방문 안내","ep":"고정","account":"코어숨 필라테스 (가상)",
+ "brand":{"colors":{"main":"#7C3AED","accent":"#DB2777","marker":"#EDE4FF"}},
+ "slides":[
+  {"layout":"cover","photo":"photos/reformer_3.jpg","focus":"50% 40%","kicker":"처음 오시는 분께","title":"첫 수업 예약,\n*3단계*면 끝나요","subtitle":"오기 전에 저장해 두세요"},
+  {"layout":"steps","kicker":"예약 방법","heading":"이렇게\n예약해요","items":[{"title":"네이버 예약 열기","text":"'첫 수업' 상품을 골라요"},{"title":"시간 고르기","text":"평일 저녁·주말 오전"},{"title":"10분 일찍 오기","text":"몸 상태를 먼저 여쭤봐요"}]},
+  {"layout":"cta","kicker":"찾아오는 길","title":"역에서\n*걸어서 5분*","info":[["위치","서울 ○○구 ○○로 34, 3층 (가상)"],["주차","건물 뒤 2대, 1시간 무료"],["시간","평일 7~22시 · 토 9~14시"]],"button":"첫 수업 예약하기 →"}
+ ]}

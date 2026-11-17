@@ -1,0 +1,20 @@
+/* 갈래 A — 실사진 + 하단 큰 흰 글씨 (aasvogel·dogsnature·monthly_bakery·franchise_radar 형)
+ * 표지: 사장님 실제 사진 꽉 채움 + 아래 검정 그라데이션 + 흰 굵은 제목 2~3줄.
+ * 본문: 흰 모눈 바탕 + 연한 주색 띠 소제목 + 짧은 글. 사진 칸은 둥근 모서리. */
+.theme-a {
+  --bg: #FFFFFF; --bg2: #F4F6F9; --ink: #1B1D21; --sub: #5A616B;
+  --main: #2F6FDE; --accent: #E5484D; --marker: #CFE0FF;
+  --line: rgba(27,29,33,.12);
+  --t-h: 80px;
+}
+.theme-a.card:not(.photo) { background-color: var(--bg);
+  background-image: linear-gradient(rgba(47,111,222,.06) 2px, transparent 2px), linear-gradient(90deg, rgba(47,111,222,.06) 2px, transparent 2px);
+  background-size: 54px 54px; }
+.theme-a .h { font-weight: 800; }
+.theme-a .kicker { display: inline-block; align-self: flex-start; background: color-mix(in srgb, var(--main) 16%, #fff); color: var(--main); padding: 6px 18px; border-radius: 8px; font-size: 30px; }
+.theme-a .list .item, .theme-a .vs .col { box-shadow: none; border: 3px solid var(--line); background: #fff; }
+.theme-a .photo-box { margin-top: 36px; border-radius: 26px; overflow: hidden; flex: 1 1 auto; min-height: 300px; position: relative; }
+.theme-a .photo-box img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.theme-a .cover.photo .ctitle, .theme-a.cover.photo .ctitle { font-size: 112px; text-shadow: 0 2px 18px rgba(0,0,0,.35); }
+.theme-a.cover.photo .kicker { background: none; color: #fff; padding: 0; font-size: 32px; opacity: .92; }
+.theme-a.photo-layout .body .spacer { display: none; }
