@@ -18,7 +18,7 @@
   season       앞으로 N주 기념일·절기·시즌 (+--unofficial: 쇼핑인사이트 작년 같은 시기 2~6주 뒤 인기 검색어)
   festival     지역 축제 목록 (대한민국 구석구석)
 
-네이버 약관 (근거: ax/research/marketing-skill/10b 4장):
+네이버 약관 (근거: 내부 조사 10b 4장):
   - 네이버 이용약관은 양과 상관없이 '사전 허락 없는 자동화된 수단으로 특정 질의어 검색'을 금지하고,
     검색·자동완성·관련 검색어 주소의 robots.txt는 Disallow: / 이다.
   - 그래서 기본 경로는 공식 API다: 환경변수 NAVER_CLIENT_ID·NAVER_CLIENT_SECRET(네이버 개발자 — 검색 API
@@ -72,7 +72,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 # 스크립트가 직접 여는 주소 (정확히 이 호스트만). 임의 주소를 열지 않으므로 내부망 접근이 불가능하다.
 ALLOWED_HOSTS = ("search.naver.com", "m.search.naver.com", "blog.naver.com", "m.blog.naver.com",
                  "rss.blog.naver.com",
-                 # 콘텐츠 발굴(ideas·trend·season·festival) — 근거: ax/research/marketing-skill/10 2장, 10b
+                 # 콘텐츠 발굴(ideas·trend·season·festival) — 근거: 내부 조사 10 2장, 10b
                  "ac.search.naver.com", "s.search.naver.com", "kin.naver.com", "datalab.naver.com",
                  "trends.google.com", "suggestqueries.google.com", "korean.visitkorea.or.kr",
                  # 키가 있을 때만 (환경변수)
@@ -997,7 +997,7 @@ def cmd_lint(a):
 
 
 # ---------------------------------------------------------------- 콘텐츠 발굴 (ideas·trend·season·festival)
-# 근거: ax/research/marketing-skill/10-현업-콘텐츠-발굴.md 2장(소스 시험), 10b(독립 검증·약관).
+# 근거: 내부 조사 10 2장(소스 시험), 10b(독립 검증·약관).
 # 기본: 내장 달력·구글/유튜브 자동완성·구글 트렌드(비공식, 자주 막힘)·축제 + 키 있으면 네이버 공식 API.
 # 네이버 자동완성·관련 검색어·지식iN 화면·쇼핑인사이트 순위는 --unofficial(동의 뒤 이 가게 1곳 몫)일 때만.
 # 실패하면 그 소스만 건너뛰고 한 줄로 알린다.
