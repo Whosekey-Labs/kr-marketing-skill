@@ -1,0 +1,163 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 440" width="1280" height="440" role="img" aria-labelledby="t d">
+  <title id="t">kr-marketing-skill</title>
+  <desc id="d">아침 골목의 작은 가게 앞에 휴대폰이 서 있고, 화면 속 카드뉴스에 하트가 올라가요. 위에는 AI 마케터가 "사장님, 이번 주 주제 3개 골라 봤어요"라고 말을 걸어요. 광고비도 시간도 없는 사장님 대신 매주 먼저 챙기는 AI 마케터 스킬.</desc>
+  <style>
+    .ko{font-family:'Apple SD Gothic Neo','Malgun Gothic','Noto Sans KR',sans-serif}
+    .mono{font-family:ui-monospace,'SFMono-Regular',Menlo,Consolas,'Liberation Mono',monospace}
+    .heart{transform-box:fill-box;transform-origin:center;opacity:0;animation:heart 4.2s ease-out infinite}
+    .h2{animation-delay:1.4s}.h3{animation-delay:2.8s}
+    .dot{animation:dot 1.4s ease-in-out infinite}
+    .d2{animation-delay:.2s}.d3{animation-delay:.4s}
+    .pop{animation:pop 8s ease-in-out infinite}
+    .glow{animation:glow 6s ease-in-out infinite alternate}
+    .like{animation:like 4.2s ease-in-out infinite}
+    @keyframes heart{0%{opacity:0;transform:translate(0,10px) scale(.6)}15%{opacity:1}100%{opacity:0;transform:translate(-20px,-70px) scale(1.1)}}
+    @keyframes dot{0%,100%{opacity:.3}50%{opacity:1}}
+    @keyframes pop{0%,100%{opacity:1}88%{opacity:1}94%{opacity:.55}}
+    @keyframes glow{from{opacity:.7}to{opacity:1}}
+    @keyframes like{0%,100%{transform:scaleX(.55)}50%{transform:scaleX(1)}}
+    @media (prefers-reduced-motion:reduce){.heart,.dot,.pop,.glow,.like{animation:none}.heart{opacity:0}}
+  </style>
+  <defs>
+    <clipPath id="card"><rect width="1280" height="440" rx="24"/></clipPath>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#10282B"/>
+      <stop offset="1" stop-color="#163538"/>
+    </linearGradient>
+    <radialGradient id="sun" cx="1060" cy="150" r="330" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FF7A59" stop-opacity=".30"/>
+      <stop offset=".55" stop-color="#FF7A59" stop-opacity=".07"/>
+      <stop offset="1" stop-color="#FF7A59" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="glass" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2F6A6D"/>
+      <stop offset="1" stop-color="#1F4C4F"/>
+    </linearGradient>
+    <clipPath id="awn"><rect x="788" y="166" width="354" height="60"/></clipPath>
+    <clipPath id="scr"><rect x="1132" y="196" width="92" height="178" rx="6"/></clipPath>
+  </defs>
+
+  <g clip-path="url(#card)">
+    <rect width="1280" height="440" fill="url(#bg)"/>
+    <rect class="glow" width="1280" height="440" fill="url(#sun)"/>
+
+    <!-- 뒤 건물 실루엣 -->
+    <g fill="#0E2326">
+      <rect x="740" y="150" width="56" height="210"/>
+      <rect x="1140" y="120" width="70" height="240"/>
+      <rect x="1210" y="170" width="70" height="190"/>
+    </g>
+
+    <!-- 가게 건물 -->
+    <rect x="800" y="96" width="330" height="262" fill="#1E4A4D"/>
+    <rect x="790" y="88" width="350" height="12" rx="3" fill="#2A5E61"/>
+    <!-- 간판 -->
+    <rect x="865" y="112" width="200" height="42" rx="8" fill="#FFF6EA"/>
+    <text x="965" y="140" text-anchor="middle" class="ko" font-size="19" font-weight="800" fill="#163538">우리 가게</text>
+    <circle cx="884" cy="133" r="5" fill="#FF7A59"/>
+    <circle cx="1046" cy="133" r="5" fill="#FF7A59"/>
+
+    <!-- 차양 -->
+    <g clip-path="url(#awn)">
+      <g>
+        <rect x="788" y="166" width="354" height="40" fill="#FFF6EA"/>
+        <g fill="#FF7A59">
+          <rect x="788" y="166" width="35" height="40"/>
+          <rect x="858" y="166" width="35" height="40"/>
+          <rect x="928" y="166" width="35" height="40"/>
+          <rect x="998" y="166" width="35" height="40"/>
+          <rect x="1068" y="166" width="35" height="40"/>
+        </g>
+        <g>
+          <circle cx="805.5" cy="206" r="17.5" fill="#FF7A59"/>
+          <circle cx="840.5" cy="206" r="17.5" fill="#FFF6EA"/>
+          <circle cx="875.5" cy="206" r="17.5" fill="#FF7A59"/>
+          <circle cx="910.5" cy="206" r="17.5" fill="#FFF6EA"/>
+          <circle cx="945.5" cy="206" r="17.5" fill="#FF7A59"/>
+          <circle cx="980.5" cy="206" r="17.5" fill="#FFF6EA"/>
+          <circle cx="1015.5" cy="206" r="17.5" fill="#FF7A59"/>
+          <circle cx="1050.5" cy="206" r="17.5" fill="#FFF6EA"/>
+          <circle cx="1085.5" cy="206" r="17.5" fill="#FF7A59"/>
+          <circle cx="1120.5" cy="206" r="17.5" fill="#FFF6EA"/>
+        </g>
+      </g>
+    </g>
+
+    <!-- 진열 창 -->
+    <rect x="818" y="236" width="172" height="100" rx="6" fill="url(#glass)" stroke="#2A5E61" stroke-width="4"/>
+    <rect x="826" y="308" width="156" height="6" rx="3" fill="#3E7A7D"/>
+    <g>
+      <ellipse cx="852" cy="298" rx="20" ry="11" fill="#E9A15B"/>
+      <path d="M840 294 q4 -5 8 0 M850 292 q4 -5 8 0 M860 294 q4 -5 8 0" fill="none" stroke="#B86E33" stroke-width="2" stroke-linecap="round"/>
+      <ellipse cx="904" cy="296" rx="24" ry="13" fill="#F2C27E"/>
+      <path d="M886 295 q6 -6 12 0 M902 293 q6 -6 12 0" fill="none" stroke="#C98A3E" stroke-width="2" stroke-linecap="round"/>
+      <circle cx="950" cy="298" r="11" fill="#E9A15B"/>
+      <circle cx="966" cy="300" r="8" fill="#F2C27E"/>
+    </g>
+    <path d="M832 248 l24 0 M832 256 l14 0" stroke="#8EE3C8" stroke-opacity=".35" stroke-width="3" stroke-linecap="round"/>
+
+    <!-- 문 -->
+    <rect x="1010" y="236" width="92" height="122" rx="4" fill="#13302F" stroke="#2A5E61" stroke-width="4"/>
+    <rect x="1022" y="248" width="68" height="46" rx="3" fill="url(#glass)"/>
+    <circle cx="1088" cy="312" r="4" fill="#FFD9A8"/>
+    <line x1="1040" y1="236" x2="1056" y2="226" stroke="#A7C4BE" stroke-width="1.5"/>
+    <line x1="1072" y1="236" x2="1056" y2="226" stroke="#A7C4BE" stroke-width="1.5"/>
+    <rect x="1030" y="256" width="52" height="22" rx="4" fill="#8EE3C8"/>
+    <text x="1056" y="272" text-anchor="middle" class="ko" font-size="12" font-weight="800" fill="#10282B">영업 중</text>
+
+    <!-- 화분 -->
+    <g>
+      <path d="M776 330 h30 l-4 28 h-22 Z" fill="#C8644A"/>
+      <path d="M791 330 C786 312 772 306 768 296 C782 298 790 308 791 318 C792 304 800 294 812 292 C808 304 798 312 791 330" fill="#4FA889"/>
+    </g>
+
+    <!-- 길 -->
+    <rect x="690" y="358" width="590" height="82" fill="#0C2022"/>
+    <rect x="690" y="356" width="590" height="6" fill="#24504F"/>
+
+    <!-- 휴대폰 (거치대 위) -->
+    <g>
+      <path d="M1160 392 l18 -14 l18 14 Z" fill="#2A5E61"/>
+      <rect x="1124" y="182" width="108" height="206" rx="16" fill="#0A1A1C" stroke="#3E7A7D" stroke-width="3"/>
+      <g clip-path="url(#scr)">
+        <rect x="1132" y="196" width="92" height="178" fill="#FFF6EA"/>
+        <rect x="1140" y="204" width="76" height="8" rx="4" fill="#D9CBB5"/>
+        <!-- 카드뉴스 표지 -->
+        <rect x="1140" y="218" width="76" height="92" rx="5" fill="#FF7A59"/>
+        <rect x="1148" y="228" width="48" height="7" rx="3.5" fill="#FFF6EA"/>
+        <rect x="1148" y="240" width="36" height="7" rx="3.5" fill="#FFF6EA"/>
+        <rect x="1148" y="256" width="60" height="44" rx="4" fill="#FFD9A8"/>
+        <circle cx="1194" cy="268" r="5" fill="#FFF6EA"/>
+        <path d="M1148 300 l18 -22 l12 13 l8 -8 l22 17 Z" fill="#E9A15B"/>
+        <!-- 반응 -->
+        <path d="M1146 324 c-3 -4 -9 -2 -7 3 l7 6 l7 -6 c2 -5 -4 -7 -7 -3 Z" fill="#FF7A59"/>
+        <rect class="like" x="1160" y="323" width="44" height="7" rx="3.5" fill="#163538" style="transform-box:fill-box;transform-origin:left center"/>
+        <rect x="1140" y="342" width="62" height="5" rx="2.5" fill="#A7B8B3"/>
+        <rect x="1140" y="353" width="44" height="5" rx="2.5" fill="#A7B8B3"/>
+      </g>
+      <!-- 올라가는 하트 -->
+      <path class="heart h1" d="M1150 170 c-6 -9 -20 -5 -15 6 l15 14 l15 -14 c5 -11 -9 -15 -15 -6 Z" fill="#FF7A59"/>
+      <path class="heart h2" d="M1204 176 c-5 -7 -16 -4 -12 5 l12 11 l12 -11 c4 -9 -7 -12 -12 -5 Z" fill="#FFB199"/>
+      <path class="heart h3" d="M1178 162 c-6 -9 -20 -5 -15 6 l15 14 l15 -14 c5 -11 -9 -15 -15 -6 Z" fill="#8EE3C8"/>
+    </g>
+
+    <!-- AI 마케터 말풍선 -->
+    <g class="pop">
+      <circle cx="822" cy="46" r="20" fill="#8EE3C8"/>
+      <path d="M822 32 l3.6 9.4 l9.4 3.6 l-9.4 3.6 l-3.6 9.4 l-3.6 -9.4 l-9.4 -3.6 l9.4 -3.6 Z" fill="#10282B"/>
+      <path d="M852 26 h320 a14 14 0 0 1 14 14 v14 a14 14 0 0 1 -14 14 h-320 a14 14 0 0 1 -14 -14 v-6 l-8 -6 l8 -4 v-4 a14 14 0 0 1 14 -14 Z" fill="#FFF6EA"/>
+      <text x="858" y="53" class="ko" font-size="16" font-weight="700" fill="#163538">사장님, 이번 주 주제 3개 골라 봤어요</text>
+      <circle class="dot" cx="1146" cy="47" r="3.2" fill="#FF7A59"/>
+      <circle class="dot d2" cx="1158" cy="47" r="3.2" fill="#FF7A59"/>
+      <circle class="dot d3" cx="1170" cy="47" r="3.2" fill="#FF7A59"/>
+    </g>
+
+    <!-- 글 -->
+    <text x="72" y="118" class="ko" font-size="17" font-weight="700" letter-spacing="2" fill="#FF7A59">소상공인 AI 마케터 스킬</text>
+    <text x="68" y="196" class="mono" font-size="56" font-weight="700" fill="#FFF6EA">kr-marketing-skill</text>
+    <text x="72" y="254" class="ko" font-size="27" font-weight="600" fill="#FFF6EA">광고비 없이, 시간 없어도</text>
+    <text x="72" y="292" class="ko" font-size="27" font-weight="600" fill="#FFF6EA">매주 먼저 챙기는 우리 가게 마케터</text>
+    <line x1="72" y1="330" x2="132" y2="330" stroke="#FF7A59" stroke-width="3"/>
+    <text x="72" y="368" class="ko" font-size="17" fill="#A7C4BE">가게 조사 · 이번 주 주제 · 블로그·카드뉴스·숏폼 · 법규 검수</text>
+  </g>
+</svg>
