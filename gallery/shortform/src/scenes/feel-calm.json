@@ -1,0 +1,33 @@
+{
+ "_card": "잔잔하게",
+ "layout": "full",
+ "theme": "warm",
+ "brand": "밀과결",
+ "fixed_title": "오전 11시\n갓 구운 *크루아상*",
+ "scenes": [
+  {
+   "photo": "../photos/m08.jpg",
+   "duration": 4.5,
+   "zoom": "in"
+  },
+  {
+   "photo": "../photos/m10.jpg",
+   "duration": 4.5,
+   "zoom": "in",
+   "transition": "fadeblack"
+  },
+  {
+   "photo": "../photos/m11.jpg",
+   "duration": 4.5,
+   "zoom": "out",
+   "transition": "fadeblack"
+  },
+  {
+   "duration": 3.5,
+   "title": "*밀과결*",
+   "caption": "오늘 아침 빵 나왔어요",
+   "transition": "fadeblack"
+  }
+ ],
+ "caption_size": 66
+}

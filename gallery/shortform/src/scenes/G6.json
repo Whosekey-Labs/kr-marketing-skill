@@ -1,0 +1,40 @@
+{
+ "_card": "G6 사장님이 직접 말하기",
+ "layout": "info",
+ "theme": "info",
+ "brand": "밀과결",
+ "fixed_title": "밤 크루아상은 왜\n*하루 두 번* 나와요?",
+ "scenes": [
+  {
+   "photo": "../photos/m08.jpg",
+   "duration": 4,
+   "caption": "버터가 *녹기 전*에 구워야 해서요",
+   "title": "사장님 답"
+  },
+  {
+   "photo": "../photos/m09.jpg",
+   "duration": 4,
+   "caption": "그래서 *11시·15시*에 구워요",
+   "transition": "fadeblack"
+  },
+  {
+   "photo": "../photos/m06.jpg",
+   "duration": 4,
+   "caption": "한 번에 *20개씩*만 나와요",
+   "transition": "fadeblack"
+  },
+  {
+   "photo": "../photos/m03.jpg",
+   "duration": 4,
+   "caption": "다 팔리면 *그날은 끝*이에요",
+   "transition": "fadeblack"
+  },
+  {
+   "duration": 3.5,
+   "title": "밀과결",
+   "caption": "질문은 *댓글로* 남겨 주세요",
+   "transition": "fadeblack"
+  }
+ ],
+ "caption_size": 66
+}

@@ -1,0 +1,63 @@
+{
+ "_card": "G7 오늘 하루",
+ "layout": "full",
+ "theme": "warm",
+ "brand": "밀과결",
+ "fixed_title": "빵집 사장의\n오픈 전 *3시간*",
+ "scenes": [
+  {
+   "duration": 2.5,
+   "hook": "오픈 전 *3시간*\n빵집에선?"
+  },
+  {
+   "photo": "../photos/a09.jpg",
+   "duration": 2.5,
+   "caption": "*반죽*부터",
+   "title": "05:00",
+   "transition": "cut"
+  },
+  {
+   "photo": "../photos/s00.jpg",
+   "duration": 2.5,
+   "caption": "모양 잡기",
+   "title": "05:40",
+   "transition": "slideleft"
+  },
+  {
+   "photo": "../photos/a11.jpg",
+   "duration": 2.5,
+   "caption": "오븐에 *쏙*",
+   "title": "06:30",
+   "transition": "cut"
+  },
+  {
+   "photo": "../photos/b00.jpg",
+   "duration": 2.5,
+   "caption": "큰 빵 *나왔다*",
+   "title": "07:10",
+   "transition": "slideleft"
+  },
+  {
+   "photo": "../photos/b10.jpg",
+   "duration": 2.5,
+   "caption": "식빵도 *한가득*",
+   "title": "07:30",
+   "transition": "cut"
+  },
+  {
+   "photo": "../photos/c00.jpg",
+   "duration": 2.5,
+   "caption": "진열 *끝*",
+   "title": "07:50",
+   "transition": "slideleft"
+  },
+  {
+   "photo": "../photos/a00.jpg",
+   "duration": 3,
+   "caption": "오늘도 *밀과결*",
+   "title": "08:00 오픈",
+   "transition": "cut"
+  }
+ ],
+ "caption_size": 66
+}

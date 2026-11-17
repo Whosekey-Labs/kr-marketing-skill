@@ -1,0 +1,5 @@
+.brief.md
+__pycache__/
+*.pyc
+.DS_Store
+tests/runs/**/out/*.png

@@ -1,0 +1,46 @@
+{
+ "_card": "G3 완성품 자랑",
+ "layout": "full",
+ "theme": "warm",
+ "brand": "오후세시반",
+ "scenes": [
+  {
+   "photo": "../photos/d05.jpg",
+   "duration": 3.5,
+   "caption": "*티라미수* 한 조각",
+   "title": "오늘의 케이크",
+   "zoom": "in"
+  },
+  {
+   "photo": "../photos/d02.jpg",
+   "duration": 3.5,
+   "caption": "진한 *초코 케이크*",
+   "transition": "fadeblack"
+  },
+  {
+   "photo": "../photos/d07.jpg",
+   "duration": 3.5,
+   "caption": "라즈베리 *한 알*",
+   "transition": "smoothleft"
+  },
+  {
+   "photo": "../photos/e04.jpg",
+   "duration": 3.5,
+   "caption": "마카롱은 *포장도* 돼요",
+   "transition": "smoothleft"
+  },
+  {
+   "photo": "../photos/e09.jpg",
+   "duration": 3.5,
+   "caption": "골라 담는 *6구 상자*",
+   "transition": "smoothleft"
+  },
+  {
+   "duration": 3,
+   "hook": "*오후세시반*",
+   "caption": "케이크는\n오후 3시 반에 나와요",
+   "transition": "fadeblack"
+  }
+ ],
+ "caption_size": 66
+}

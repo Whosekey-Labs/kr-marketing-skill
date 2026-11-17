@@ -1,0 +1,51 @@
+{
+ "_card": "G1 만드는 과정",
+ "layout": "full",
+ "theme": "warm",
+ "brand": "밀과결",
+ "fixed_title": "새벽에 반죽해\n*캄파뉴* 한 덩이",
+ "scenes": [
+  {
+   "photo": "../photos/a10.jpg",
+   "duration": 3,
+   "caption": "새벽 반죽, *오후 3시*에 나와요",
+   "title": "완성",
+   "zoom": "in"
+  },
+  {
+   "photo": "../photos/a09.jpg",
+   "duration": 3.5,
+   "caption": "밀가루에 물을 *조금씩*",
+   "title": "1. 반죽",
+   "transition": "fadeblack"
+  },
+  {
+   "photo": "../photos/s00.jpg",
+   "duration": 3.5,
+   "caption": "손으로 *한 번 더* 접어요",
+   "title": "2. 모양",
+   "transition": "smoothleft"
+  },
+  {
+   "photo": "../photos/a11.jpg",
+   "duration": 3.5,
+   "caption": "냄비째 *오븐으로*",
+   "title": "3. 굽기",
+   "transition": "smoothleft"
+  },
+  {
+   "photo": "../photos/p08.jpg",
+   "duration": 3.5,
+   "caption": "칼집 따라 *쩍* 벌어진 껍질",
+   "title": "4. 식히기",
+   "transition": "zoomin"
+  },
+  {
+   "duration": 3,
+   "title": "*밀과결*",
+   "caption": "오늘 아침 빵 나왔어요",
+   "transition": "fadeblack"
+  }
+ ],
+ "caption_size": 66
+}

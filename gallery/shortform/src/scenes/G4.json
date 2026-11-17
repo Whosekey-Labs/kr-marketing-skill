@@ -1,0 +1,50 @@
+{
+ "_card": "G4 가게 구경",
+ "layout": "full",
+ "theme": "warm",
+ "brand": "오후세시반",
+ "fixed_title": "골목 안에\n*이런 카페*가?",
+ "scenes": [
+  {
+   "photo": "../photos/f11.jpg",
+   "duration": 3.5,
+   "caption": "문 열면 *초록 창가*",
+   "zoom": "in"
+  },
+  {
+   "photo": "../photos/f00.jpg",
+   "duration": 3,
+   "caption": "작은 *2인 자리*",
+   "title": "입구",
+   "transition": "fadeblack"
+  },
+  {
+   "photo": "../photos/f13.jpg",
+   "duration": 3.5,
+   "caption": "햇살이 *오후 내내*",
+   "title": "창가 자리",
+   "transition": "smoothleft"
+  },
+  {
+   "photo": "../photos/f14.jpg",
+   "duration": 3,
+   "caption": "오늘 구운 것만 *진열*",
+   "title": "케이크 진열장",
+   "transition": "smoothleft"
+  },
+  {
+   "photo": "../photos/f06.jpg",
+   "duration": 3.5,
+   "caption": "*조용히* 쉬어 가요",
+   "title": "안쪽 자리",
+   "transition": "smoothleft"
+  },
+  {
+   "duration": 3,
+   "title": "*오후세시반*",
+   "caption": "예약은 프로필 링크로",
+   "transition": "fadeblack"
+  }
+ ],
+ "caption_size": 66
+}

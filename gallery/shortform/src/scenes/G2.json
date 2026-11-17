@@ -1,0 +1,57 @@
+{
+ "_card": "G2 전후 비교",
+ "layout": "full",
+ "theme": "info",
+ "brand": "틈새집 인테리어",
+ "scenes": [
+  {
+   "duration": 2.5,
+   "hook": "오래된 욕실\n*이렇게* 바뀌어요",
+   "tag": "전후 비교"
+  },
+  {
+   "photo": "../photos/h00.jpg",
+   "duration": 3,
+   "caption": "타일 깨지고 *물 새던* 욕실",
+   "title": "전",
+   "zoom": "in",
+   "transition": "cut"
+  },
+  {
+   "photo": "../photos/h04.jpg",
+   "duration": 3,
+   "caption": "누렇게 바랜 *벽과 바닥*",
+   "title": "전",
+   "transition": "cut"
+  },
+  {
+   "photo": "../photos/h03.jpg",
+   "duration": 2.5,
+   "caption": "뜯어내고 *방수*부터",
+   "title": "공사",
+   "transition": "slideleft"
+  },
+  {
+   "photo": "../photos/f13.jpg",
+   "duration": 4,
+   "caption": "밝은 벽, *원목 바닥*",
+   "title": "후",
+   "zoom": "out",
+   "transition": "zoomin"
+  },
+  {
+   "photo": "../photos/f12.jpg",
+   "duration": 3,
+   "caption": "범위·금액은 *상담 때* 안내",
+   "title": "후",
+   "transition": "slideleft"
+  },
+  {
+   "duration": 3,
+   "hook": "*틈새집 인테리어*",
+   "caption": "견본 영상 · 전후는 다른 공간 사진",
+   "transition": "fadeblack"
+  }
+ ],
+ "caption_size": 66
+}

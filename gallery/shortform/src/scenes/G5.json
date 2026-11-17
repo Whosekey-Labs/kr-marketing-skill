@@ -1,0 +1,40 @@
+{
+ "_card": "G5 정보 카드",
+ "layout": "info",
+ "theme": "info",
+ "brand": "코어담필라테스",
+ "fixed_title": "필라테스 첫 수업 전\n*꼭 알아둘 3가지*",
+ "scenes": [
+  {
+   "duration": 3,
+   "hook": "처음 필라테스\n*이것만* 알면 돼요"
+  },
+  {
+   "photo": "../photos/g10.jpg",
+   "duration": 5,
+   "caption": "몸에 붙는 옷이 *동작 보기* 좋아요",
+   "title": "① 복장",
+   "transition": "slideup"
+  },
+  {
+   "photo": "../photos/g09.jpg",
+   "duration": 5,
+   "caption": "*미끄럼 방지 양말*을 챙겨요",
+   "title": "② 양말",
+   "transition": "slideup"
+  },
+  {
+   "duration": 5,
+   "title": "③ 식사",
+   "caption": "수업 *1시간 전*엔\n가볍게 먹어요",
+   "transition": "slideup"
+  },
+  {
+   "duration": 3.5,
+   "title": "코어담필라테스",
+   "caption": "궁금한 건 *댓글로*",
+   "transition": "fadeblack"
+  }
+ ],
+ "caption_size": 66
+}

@@ -1,0 +1,40 @@
+{
+ "_card": "G8 가게 이야기",
+ "layout": "full",
+ "theme": "warm",
+ "brand": "오후세시반",
+ "fixed_title": "회사 그만두고\n*케이크 가게* 연 이유",
+ "scenes": [
+  {
+   "photo": "../photos/f06.jpg",
+   "duration": 4,
+   "caption": "점심마다 들르던\n*작은 카페*가 있었어요",
+   "zoom": "in"
+  },
+  {
+   "photo": "../photos/d02.jpg",
+   "duration": 4,
+   "caption": "케이크 한 조각이\n*하루를 버티게* 했어요",
+   "transition": "fadeblack"
+  },
+  {
+   "photo": "../photos/e03.jpg",
+   "duration": 4,
+   "caption": "그래서 저도\n*그런 가게*를 열었어요",
+   "transition": "fadeblack"
+  },
+  {
+   "photo": "../photos/d05.jpg",
+   "duration": 4,
+   "caption": "지금도 매일\n*오후 3시 반*에 내놓아요",
+   "transition": "fadeblack"
+  },
+  {
+   "duration": 3.5,
+   "title": "*오후세시반*",
+   "caption": "오늘도 한 조각 하러 오세요",
+   "transition": "fadeblack"
+  }
+ ],
+ "caption_size": 66
+}

@@ -1,0 +1,90 @@
+{
+ "B01": {
+  "3": "folder_0",
+  "4": "receipt_7"
+ },
+ "B02": {
+  "1": "reception_0",
+  "2": "notebook_0"
+ },
+ "B03": {
+  "1": "reformer_0",
+  "3": "reformer_2"
+ },
+ "B04": {
+  "1": "apartkitchen_1",
+  "2": "apartkitchen_0",
+  "3": "tape_3",
+  "5": "pipes_1",
+  "11": "apartkitchen_2",
+  "12": "apartkitchen_5"
+ },
+ "B05": {
+  "1": "grooming_2",
+  "5": "smalldog_5",
+  "6": "smalldog_4"
+ },
+ "B06": {
+  "1": "campagne_0",
+  "4": "bakerydisplay_1",
+  "5": "notebook_0"
+ },
+ "B07": {
+  "1": "sf_f00",
+  "3": "latte_1",
+  "6": "cookiebox_1"
+ },
+ "B08": {
+  "2": "reformer_0"
+ },
+ "B09": {
+  "2": "tartslice_5",
+  "3": "dessertbox_0",
+  "6": "mulledwine_0"
+ },
+ "B10": {
+  "1": "bakerydisplay_0",
+  "5": "shoppingbag_0",
+  "6": "sf_a09"
+ },
+ "B11": {
+  "1": "hanok_0",
+  "2": "hanok_2",
+  "5": "dining_0",
+  "6": "apartkitchen_0",
+  "7": "grill_1",
+  "10": "bathtub_1",
+  "14": "path_2",
+  "15": "beachsunrise_0"
+ },
+ "B12": {
+  "1": "dessertbox_2",
+  "4": "sourdoughslice_1",
+  "5": "madeleine_3",
+  "6": "campagne_2",
+  "8": "notebook_0"
+ },
+ "B13": {
+  "1": "apartkitchen_3",
+  "3": "emptyroom_1",
+  "4": "apartkitchen_4",
+  "5": "bathroom_0",
+  "7": "playground_2",
+  "9": "schoolroad_1"
+ },
+ "V1": {
+  "1": "campagne_1"
+ },
+ "V2": {
+  "1": "campagne_1"
+ },
+ "V3": {
+  "1": "campagne_1"
+ },
+ "V4": {
+  "1": "campagne_1"
+ },
+ "V5": {
+  "1": "campagne_1"
+ }
+}

@@ -1,0 +1,50 @@
+{
+ "_card": "G9 유행 따라 하기",
+ "layout": "full",
+ "theme": "warm",
+ "brand": "오후세시반",
+ "fixed_title": "디저트 카페\n사장 *특*",
+ "scenes": [
+  {
+   "duration": 2.5,
+   "hook": "디저트 카페\n사장 *특*"
+  },
+  {
+   "photo": "../photos/d02.jpg",
+   "duration": 2.5,
+   "caption": "케이크 자를 때 *숨 참음*",
+   "transition": "cut"
+  },
+  {
+   "photo": "../photos/e09.jpg",
+   "duration": 2.5,
+   "caption": "마카롱 줄 *맞추다 10분*",
+   "transition": "cut"
+  },
+  {
+   "photo": "../photos/e01.jpg",
+   "duration": 2.5,
+   "caption": "깨진 건 *내 간식*",
+   "transition": "cut"
+  },
+  {
+   "photo": "../photos/f14.jpg",
+   "duration": 2.5,
+   "caption": "진열장 *닦고 또 닦기*",
+   "transition": "cut"
+  },
+  {
+   "photo": "../photos/d07.jpg",
+   "duration": 2.5,
+   "caption": "마지막 한 조각은 *못 팜*",
+   "transition": "cut"
+  },
+  {
+   "duration": 3,
+   "title": "*공감*되면 저장",
+   "caption": "오후세시반",
+   "transition": "slideup"
+  }
+ ],
+ "caption_size": 66
+}

@@ -1,0 +1,36 @@
+{
+ "_card": "정보 또박또박",
+ "layout": "info",
+ "theme": "info",
+ "brand": "밀과결",
+ "fixed_title": "크루아상 맛있게\n먹는 *3가지*",
+ "scenes": [
+  {
+   "photo": "../photos/m08.jpg",
+   "duration": 4,
+   "caption": "*당일*에 드세요",
+   "title": "① 당일"
+  },
+  {
+   "photo": "../photos/m10.jpg",
+   "duration": 4,
+   "caption": "다음 날엔 오븐에 *3분*",
+   "title": "② 데우기",
+   "transition": "slideup"
+  },
+  {
+   "photo": "../photos/m11.jpg",
+   "duration": 4,
+   "caption": "햄·채소 넣어 *샌드위치*",
+   "title": "③ 응용",
+   "transition": "slideup"
+  },
+  {
+   "duration": 3.5,
+   "title": "밀과결",
+   "caption": "*저장*해 두세요",
+   "transition": "fadeblack"
+  }
+ ],
+ "caption_size": 66
+}

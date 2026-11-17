@@ -1,0 +1,55 @@
+{
+ "_card": "빠르고 신나게",
+ "layout": "full",
+ "theme": "warm",
+ "brand": "밀과결",
+ "fixed_title": "크루아상\n*나오는 날*",
+ "scenes": [
+  {
+   "duration": 2,
+   "hook": "크루아상\n*나오는 날*"
+  },
+  {
+   "photo": "../photos/m08.jpg",
+   "duration": 2,
+   "caption": "*갓* 나옴",
+   "title": "11:00",
+   "transition": "cut"
+  },
+  {
+   "photo": "../photos/m10.jpg",
+   "duration": 2,
+   "caption": "결 *보소*",
+   "title": "11:05",
+   "transition": "cut"
+  },
+  {
+   "photo": "../photos/m11.jpg",
+   "duration": 2,
+   "caption": "바로 *한 입*",
+   "title": "11:10",
+   "transition": "cut"
+  },
+  {
+   "photo": "../photos/c00.jpg",
+   "duration": 2,
+   "caption": "바게트도 *출동*",
+   "title": "11:20",
+   "transition": "cut"
+  },
+  {
+   "photo": "../photos/a00.jpg",
+   "duration": 2,
+   "caption": "진열 *끝*",
+   "title": "11:30",
+   "transition": "slideleft"
+  },
+  {
+   "duration": 2.5,
+   "title": "*밀과결*",
+   "caption": "빨리 오세요",
+   "transition": "slideleft"
+  }
+ ],
+ "caption_size": 66
+}

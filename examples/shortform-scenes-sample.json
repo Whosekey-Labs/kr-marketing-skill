@@ -1,0 +1,21 @@
+{
+  "_설명": "예시 장면표(동네 빵집, 유형 F08 시간 자막 오픈 루틴, layout=full 브이로그형). 사진이 없어 '글자 카드'(가게 색 면 + 큰 글자, 글자 단위 등장)로 채웠다. 실제로는 장면에 \"photo\": \"사진.jpg\" 또는 \"clip\": \"영상.mp4\" 를 넣으면 화면 전체를 채운다(이 파일 기준 상대 경로). *별표*로 감싼 말은 강조색. 정보형(IT·세무·병원)은 \"layout\": \"info\".",
+  "title": "빵집 오픈 전 루틴",
+  "type": "F08",
+  "preset": "P3",
+  "layout": "full",
+  "theme": "warm",
+  "brand": "동네 빵집",
+  "fixed_title": "9시 오픈 빵집\n사장의 아침 2시간",
+  "caption_size": 68,
+  "title_size": 72,
+  "music": null,
+  "scenes": [
+    {"duration": 3.0, "hook": "오픈 전 *2시간*\n빵집에선\n무슨 일이?"},
+    {"duration": 3.5, "title": "07:00", "caption": "출근하자마자\n*반죽*부터 꺼내요"},
+    {"duration": 3.5, "title": "07:40", "caption": "버터 넣고 *돌돌* 말기"},
+    {"duration": 3.0, "title": "08:20", "caption": "오븐에 들어갑니다"},
+    {"duration": 3.5, "title": "08:40", "caption": "소금 톡톡\n*갓 나온 소금빵*"},
+    {"duration": 4.5, "title": "09:00 *오픈*", "caption": "갓 구운 빵은 오전에 나가요\n위치는 프로필에서"}
+  ]
+}
